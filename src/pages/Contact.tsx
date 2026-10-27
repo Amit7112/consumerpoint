@@ -5,13 +5,16 @@ import EnquiryForm from "../components/EnquiryForm";
 
 export default function Contact() {
   const business = useBusiness();
+  const phone = business.phone || "9805350321";
+  const whatsapp = business.whatsapp || "919805350321";
+
   const details = [
     {
       icon: Phone,
       title: "Call us",
-      value: business.phone,
-      placeholder: "Business phone number to be provided",
-      href: business.phone ? `tel:${business.phone}` : "",
+      value: phone,
+      placeholder: "9805350321",
+      href: `tel:${phone}`,
     },
     {
       icon: Mail,
@@ -84,26 +87,15 @@ export default function Contact() {
                 </div>
               ))}
             </div>
-            {business.whatsapp ? (
-              <a
-                className="button button-secondary whatsapp-contact"
-                href={whatsappUrl(business.whatsapp)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle size={17} />
-                Chat on WhatsApp
-              </a>
-            ) : (
-              <button
-                className="button button-secondary whatsapp-contact"
-                disabled
-                title="A verified business WhatsApp number has not been provided"
-              >
-                <MessageCircle size={17} />
-                WhatsApp not configured
-              </button>
-            )}
+            <a
+              className="button button-secondary whatsapp-contact"
+              href={whatsappUrl(whatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle size={17} />
+              Chat on WhatsApp
+            </a>
             <div className="map-placeholder">
               <MapPin size={23} />
               <p>

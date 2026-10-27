@@ -180,10 +180,10 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
-      {/^\+?[1-9]\d{9,14}$/.test(business.whatsapp) && (
+      {/^\+?[1-9]\d{9,14}$/.test(business.whatsapp || "919805350321") && (
         <a
           className="whatsapp-float"
-          href={whatsappUrl(business.whatsapp)}
+          href={whatsappUrl(business.whatsapp || "919805350321")}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Enquire on WhatsApp"
