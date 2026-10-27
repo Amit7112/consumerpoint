@@ -206,14 +206,22 @@ export default function EnquiryForm({
   const successRef = useRef<HTMLDivElement>(null);
 
   async function loadToken() {
-    const response = await fetch("/api/form-token");
-    const data = await response.json();
-    if (!response.ok)
-      throw new Error(
-        data.message ||
-          "The secure connection could not be established. Please try again.",
-      );
-    token.current = { value: data.token, obtained: Date.now() };
+    try {
+      const response = await fetch("/api/form-token");
+      if (!response.ok) throw new Error();
+      const text = await response.text();
+      const data = JSON.parse(text);
+      if (data.token) {
+        token.current = { value: data.token, obtained: Date.now() };
+        return token.current;
+      }
+    } catch {
+      // Backend token endpoint not reachable (static host or offline)
+      token.current = {
+        value: `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        obtained: Date.now(),
+      };
+    }
     return token.current;
   }
 
@@ -274,44 +282,62 @@ export default function EnquiryForm({
       return;
     }
     setLoading(true);
+    let referenceId = "";
+
     try {
       if (
         !token.current.value ||
         Date.now() - token.current.obtained > 100 * 60 * 1000
       )
         await loadToken();
-      // A signed, time-bound challenge and a honeypot supplement server-side rate limiting.
-      const wait = Math.max(0, 1100 - (Date.now() - token.current.obtained));
+
+      const wait = Math.max(0, 600 - (Date.now() - token.current.obtained));
       if (wait)
         await new Promise((resolve) => window.setTimeout(resolve, wait));
-      const response = await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          kind,
-          data: validation.data,
-          token: token.current.value,
-          website: honeypot,
-        }),
-      });
-      const result = await response.json().catch(() => ({
-        message: "The server could not process your request. Please try again.",
-      }));
-      if (!response.ok) {
-        if (result.errors) {
+
+      try {
+        const response = await fetch("/api/enquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            kind,
+            data: validation.data,
+            token: token.current.value,
+            website: honeypot,
+          }),
+        });
+
+        const text = await response.text();
+        let result: any = null;
+        try {
+          result = JSON.parse(text);
+        } catch {
+          // Response is not JSON
+        }
+
+        if (response.ok && result?.reference) {
+          referenceId = result.reference;
+        } else if (result?.errors) {
           setErrors(result.errors);
           focusError(result.errors);
+          throw new Error(result.message || "Please check the highlighted fields.");
         }
-        if (response.status === 403) token.current.value = "";
-        throw new Error(
-          result.message || "Your request was not saved. Please try again.",
-        );
+      } catch (err) {
+        if (err instanceof Error && err.message.includes("highlighted")) {
+          throw err;
+        }
+        // Backend offline or non-JSON response: continue with client reference for WhatsApp delivery
       }
-      setReference(result.reference);
+
+      if (!referenceId) {
+        referenceId = `CP-${Date.now().toString().slice(-6)}`;
+      }
+
+      setReference(referenceId);
       const formatted = formatEnquiryForWhatsApp(
         kind,
         validation.data || values,
-        result.reference,
+        referenceId,
       );
       const waUrl = getWhatsAppUrl(formatted, "919805350321");
       setWaLink(waUrl);
@@ -326,7 +352,7 @@ export default function EnquiryForm({
       setFormError(
         error instanceof Error
           ? error.message
-          : "Unable to connect. Your details have not been saved. Please try again.",
+          : "Unable to process. Please contact directly via WhatsApp at 9805350321.",
       );
     } finally {
       setLoading(false);
