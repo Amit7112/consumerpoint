@@ -16,32 +16,32 @@ import PinCodeChecker from "../components/PinCodeChecker";
 
 const homeReviews = [
   {
-    name: "Rahul Sharma",
+    name: "Ritesh Pandey",
     service: "Air Conditioners",
     rating: 5,
     quote:
       "Prompt AC servicing before summer peak. Technician was on time, cleaned both units, and checked pressure thoroughly.",
-    initials: "RS",
+    initials: "RP",
     avatarBg: "#eff6ff",
     avatarColor: "#0284c7",
   },
   {
-    name: "Priya Venkatesh",
+    name: "Amit Shukla",
     service: "Washing Machines",
     rating: 5,
     quote:
       "Repaired our front-load washing machine drum issue with authentic parts. Clear diagnosis and fair pricing.",
-    initials: "PV",
+    initials: "AS",
     avatarBg: "#f0fdf4",
     avatarColor: "#16a34a",
   },
   {
-    name: "Aniket Kulkarni",
+    name: "Anurag Jha",
     service: "AMC Maintenance",
     rating: 5,
     quote:
       "Enrolled in Comprehensive AMC. Scheduled quarterly checks are super smooth and give total peace of mind.",
-    initials: "AK",
+    initials: "AJ",
     avatarBg: "#faf5ff",
     avatarColor: "#9333ea",
   },
@@ -101,6 +101,25 @@ export default function Home() {
           </motion.div>
         </div>
         <div className="hero-bottom-line" />
+      </section>
+
+      {/* Prominently Highlighted Service Availability Section */}
+      <section className="section home-pincode-section" id="check-service-availability">
+        <div className="container">
+          <Reveal>
+            <PinCodeChecker showDirectory={false} compact={true} />
+            <div style={{ textAlign: "center", marginTop: "24px" }}>
+              <Link
+                to="/service-locations#location-directory"
+                className="text-link"
+                style={{ justifyContent: "center", fontSize: "14px", fontWeight: 600 }}
+              >
+                Browse complete directory of 430+ locations & post offices
+                <ArrowUpRight size={16} />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
       <section className="section core-services">
@@ -345,25 +364,6 @@ export default function Home() {
 
             <div className="home-feedback-cta">
               <ButtonLink to="/feedback">Read All Customer Reviews & Give Feedback</ButtonLink>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Home Service Availability Section */}
-      <section className="section home-pincode-section">
-        <div className="container">
-          <Reveal>
-            <PinCodeChecker showDirectory={false} compact={true} />
-            <div style={{ textAlign: "center", marginTop: "28px" }}>
-              <Link
-                to="/service-locations#location-directory"
-                className="text-link"
-                style={{ justifyContent: "center", fontSize: "14px", fontWeight: 600 }}
-              >
-                Browse complete directory of 430+ locations & post offices
-                <ArrowUpRight size={16} />
-              </Link>
             </div>
           </Reveal>
         </div>

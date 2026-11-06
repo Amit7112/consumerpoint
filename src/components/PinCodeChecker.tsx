@@ -1,4 +1,4 @@
-import { useState, useMemo, type FormEvent } from "react";
+import { useState, useMemo, useEffect, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
@@ -32,6 +32,26 @@ export default function PinCodeChecker({
   const [checkerLoading, setCheckerLoading] = useState(false);
   const [checkerError, setCheckerError] = useState("");
   const [checkResult, setCheckResult] = useState<PincodeCheckResult | null>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
+
+  useEffect(() => {
+    function checkHash() {
+      if (
+        typeof window !== "undefined" &&
+        (window.location.hash === "#availability-checker" ||
+          window.location.hash === "#check-pincode" ||
+          window.location.hash === "#service-checker")
+      ) {
+        setIsHighlighted(true);
+        const t = setTimeout(() => setIsHighlighted(false), 2400);
+        return () => clearTimeout(t);
+      }
+    }
+    checkHash();
+    window.addEventListener("hashchange", checkHash);
+    return () => window.removeEventListener("hashchange", checkHash);
+  }, []);
 
   // Directory Search states
   const [searchQuery, setSearchQuery] = useState("");
@@ -170,7 +190,11 @@ export default function PinCodeChecker({
           SECTION 1 & 2: PIN CODE AVAILABILITY CHECKER
          ========================================================================= */}
       <section className="pincode-checker-section" id="availability-checker">
-        <div className={`pincode-card-main ${compact ? "pincode-card-compact" : ""}`}>
+        <div
+          className={`pincode-card-main ${compact ? "pincode-card-compact" : ""} ${
+            isHighlighted ? "highlight-pulse" : ""
+          } ${isFocused ? "is-focused" : ""}`}
+        >
           <div className="pincode-header-block">
             <span className="pincode-badge">
               <Sparkles size={14} />
@@ -184,7 +208,11 @@ export default function PinCodeChecker({
           </div>
 
           <form onSubmit={handleCheck} className="pincode-form" noValidate>
-            <div className="pincode-input-wrap">
+            <div
+              className={`pincode-input-wrap ${isFocused ? "is-focused" : ""} ${
+                pinInput.length === 6 ? "is-ready" : ""
+              }`}
+            >
               <MapPin className="pincode-input-icon" size={20} />
               <input
                 type="text"
@@ -192,6 +220,8 @@ export default function PinCodeChecker({
                 pattern="[0-9]*"
                 maxLength={6}
                 value={pinInput}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
                 onChange={(e) => {
                   const val = e.target.value.replace(/\D/g, "").slice(0, 6);
                   setPinInput(val);
@@ -217,7 +247,9 @@ export default function PinCodeChecker({
               <button
                 type="submit"
                 disabled={checkerLoading}
-                className="button button-primary pincode-submit-btn"
+                className={`button button-primary pincode-submit-btn ${
+                  pinInput.length === 6 ? "btn-ready-pulse" : ""
+                }`}
               >
                 {checkerLoading ? (
                   <>

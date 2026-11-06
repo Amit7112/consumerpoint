@@ -7,7 +7,6 @@ import {
   ArrowUpRight,
   MessageCircle,
   ArrowRight,
-  Shield,
 } from "lucide-react";
 import { Brand } from "./Brand";
 import { navigation } from "../data";
@@ -37,32 +36,14 @@ function Header() {
             </NavLink>
           ))}
         </nav>
-        <div className="header-actions-group">
-          <Link
-            to="/technician"
-            className="header-portal-btn tech"
-            title="Technician Portal"
-          >
-            <Wrench size={13} />
-            <span>Tech Portal</span>
-          </Link>
-          <Link
-            to="/admin"
-            className="header-portal-btn admin"
-            title="Admin Dashboard"
-          >
-            <Shield size={13} />
-            <span>Admin</span>
-          </Link>
-          <Link
-            to="/services#service-request"
-            className="button button-primary header-cta"
-          >
-            <Wrench size={15} />
-            Request a Service
-            <ArrowUpRight size={15} />
-          </Link>
-        </div>
+        <Link
+          to="/services#service-request"
+          className="button button-primary header-cta"
+        >
+          <Wrench size={15} />
+          Request a Service
+          <ArrowUpRight size={15} />
+        </Link>
         <button
           className="menu-toggle"
           aria-label={open ? "Close navigation" : "Open navigation"}
@@ -167,12 +148,6 @@ function Footer() {
                 <Link to="/refund-cancellation-policy">
                   Refund & Cancellation
                 </Link>
-              </li>
-              <li>
-                <Link to="/technician">Technician Portal</Link>
-              </li>
-              <li>
-                <Link to="/admin">Admin Dashboard</Link>
               </li>
             </ul>
           </div>
