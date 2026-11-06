@@ -10,7 +10,7 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
-import rawPincodesData from "../data/pincodes.json";
+import rawPincodesData from "../../config/pincodes.json";
 import type { LocationRecord, PincodeCheckResult } from "../types/pincode";
 import { useBusiness, whatsappUrl } from "../config";
 import { getLocationWhatsAppUrl } from "../utils/whatsapp";

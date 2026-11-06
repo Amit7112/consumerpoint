@@ -154,16 +154,10 @@ with zipfile.ZipFile(wb_path, 'r') as z:
     print(f"Districts: {districts}")
     print(f"Taluks/Sub-districts: {taluks}")
     
-    # Save to JSON
+    # Save to JSON in config directory
     import os
-    os.makedirs("src/data", exist_ok=True)
     os.makedirs("config", exist_ok=True)
-    out_path = "src/data/pincodes.json"
+    out_path = "config/pincodes.json"
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(records, f, indent=2, ensure_ascii=False)
     print(f"Saved to {out_path}")
-    
-    # Also save to config/pincodes.json for backend
-    with open("config/pincodes.json", "w", encoding="utf-8") as f:
-        json.dump(records, f, indent=2, ensure_ascii=False)
-    print("Saved to config/pincodes.json")
