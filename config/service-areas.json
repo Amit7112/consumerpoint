@@ -1,4 +1,101 @@
 {
-  "confirmed": false,
-  "areas": []
+  "confirmed": true,
+  "areas": [
+    {
+      "city": "Jaunpur",
+      "pins": [
+        "222001",
+        "222002",
+        "222003",
+        "222101",
+        "222105",
+        "222109",
+        "222125",
+        "222127",
+        "222128",
+        "222129",
+        "222131",
+        "222132",
+        "222133",
+        "222135",
+        "222136",
+        "222137",
+        "222138",
+        "222139",
+        "222141",
+        "222142",
+        "222143",
+        "222144",
+        "222145",
+        "222146",
+        "222148",
+        "222149",
+        "222161",
+        "222162",
+        "222165",
+        "222170",
+        "222175",
+        "222180",
+        "222181",
+        "222201",
+        "222202",
+        "222203",
+        "222204",
+        "223101",
+        "223102",
+        "223103",
+        "223104",
+        "223105"
+      ],
+      "categories": [
+        "Air Conditioners",
+        "Refrigerators",
+        "Washing Machines",
+        "Televisions",
+        "Geysers & Water Heaters",
+        "Kitchen Appliances",
+        "Water Purifiers",
+        "Fans & Electrical Appliances",
+        "Other Appliances"
+      ],
+      "verified": true
+    },
+    {
+      "city": "Kaushambi",
+      "pins": [
+        "212201",
+        "212217"
+      ],
+      "categories": [
+        "Air Conditioners",
+        "Refrigerators",
+        "Washing Machines",
+        "Televisions",
+        "Geysers & Water Heaters",
+        "Kitchen Appliances",
+        "Water Purifiers",
+        "Fans & Electrical Appliances",
+        "Other Appliances"
+      ],
+      "verified": true
+    },
+    {
+      "city": "Prayagraj",
+      "pins": [
+        "212202"
+      ],
+      "categories": [
+        "Air Conditioners",
+        "Refrigerators",
+        "Washing Machines",
+        "Televisions",
+        "Geysers & Water Heaters",
+        "Kitchen Appliances",
+        "Water Purifiers",
+        "Fans & Electrical Appliances",
+        "Other Appliances"
+      ],
+      "verified": true
+    }
+  ]
 }

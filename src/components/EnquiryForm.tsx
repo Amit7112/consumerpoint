@@ -199,6 +199,7 @@ export default function EnquiryForm({
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
   const [reference, setReference] = useState("");
+  const [allocatedJobId, setAllocatedJobId] = useState("");
   const [waLink, setWaLink] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const token = useRef({ value: "", obtained: 0 });
@@ -317,6 +318,9 @@ export default function EnquiryForm({
 
         if (response.ok && result?.reference) {
           referenceId = result.reference;
+          if (result.jobId) {
+            setAllocatedJobId(result.jobId);
+          }
         } else if (result?.errors) {
           setErrors(result.errors);
           focusError(result.errors);
@@ -374,7 +378,14 @@ export default function EnquiryForm({
             Your request has been securely recorded for the Consumer Point team
             to review. Please keep your reference for follow-up.
           </p>
-          <strong className="reference-label">REFERENCE: {reference}</strong>
+          <strong className="reference-label">
+            {allocatedJobId ? `SERVICE REQUEST ID: ${allocatedJobId}` : `REFERENCE: ${reference}`}
+          </strong>
+          {allocatedJobId && (
+            <p style={{ margin: "0.25rem 0 0.75rem", fontSize: "0.85rem", color: "#1683ff", fontWeight: 600 }}>
+              ✓ Auto-allocated to verified technician for your PIN code area
+            </p>
+          )}
 
           <div className="whatsapp-forward-card">
             <a
@@ -407,6 +418,7 @@ export default function EnquiryForm({
             className="button button-secondary"
             onClick={() => {
               setReference("");
+              setAllocatedJobId("");
               setWaLink("");
               setValues(initialData(kind, params));
               setErrors({});

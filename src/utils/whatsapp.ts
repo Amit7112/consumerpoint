@@ -6,6 +6,19 @@ export function getWhatsAppUrl(text?: string, phone?: string): string {
   return `https://wa.me/${target}?text=${encodeURIComponent(msg)}`;
 }
 
+export function getLocationWhatsAppUrl(
+  locationName: string,
+  district: string,
+  pincode: string,
+  phone?: string,
+): string {
+  const loc = locationName || "my area";
+  const dist = district || "our district";
+  const pin = pincode || "my PIN code";
+  const message = `Hello Consumer Point, I want to enquire about service availability in ${loc}, ${dist}, PIN Code: ${pin}. Please assist me.`;
+  return getWhatsAppUrl(message, phone);
+}
+
 export function formatEnquiryForWhatsApp(
   kind: string,
   data: Record<string, any>,

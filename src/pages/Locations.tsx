@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { applianceCategories } from "../../shared/validation.mjs";
 import { CheckList, PageHero, SEO } from "../components/UI";
-import { useBusiness } from "../config";
+import PinCodeChecker from "../components/PinCodeChecker";
 
 type CoverageResult = {
   status: "available" | "unavailable" | "unconfirmed";
@@ -17,12 +17,12 @@ type CoverageResult = {
 };
 
 export default function Locations() {
-  const business = useBusiness();
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<CoverageResult | null>(null);
+
   async function check(event: FormEvent) {
     event.preventDefault();
     setError("");
@@ -57,29 +57,39 @@ export default function Locations() {
       setLoading(false);
     }
   }
+
   return (
     <>
       <SEO
-        title="Check Appliance Service Locations"
-        description="Check service availability by city or Indian PIN code. Consumer Point confirms appliance eligibility and local service coverage before an appointment is agreed."
+        title="Check Service Availability & PIN Codes"
+        description="Check appliance service availability by PIN code across Jaunpur, Prayagraj, Kaushambi and surrounding areas. Instant PIN verification and WhatsApp enquiry."
       />
+
       <PageHero
-        eyebrow="Service Locations"
-        title="Good service starts with the right location."
+        eyebrow="Service Locations & Network"
+        title="Check service availability in your area."
       >
-        Tell us where you need support. Coverage is checked by appliance
-        category and confirmed before any visit is arranged.
+        Serving 430+ post office locations and 45 PIN codes across Jaunpur,
+        Prayagraj, and Kaushambi. Enter your 6-digit PIN code below for instant confirmation.
       </PageHero>
-      <section className="section">
+
+      {/* Main PIN Code Availability Checker & Directory Section */}
+      <PinCodeChecker showDirectory={true} />
+
+      {/* Secondary: Appliance Category Specific Verification */}
+      <section className="section appliance-coverage-section">
         <div className="container coverage-layout">
           <form
             className="coverage-form"
             onSubmit={check}
             noValidate
-            aria-label="Check service availability"
+            aria-label="Check appliance-specific service availability"
           >
-            <h2>Let's check your area.</h2>
-            <p>Enter your city or PIN code and choose an appliance.</p>
+            <h2>Check by Appliance Category</h2>
+            <p>
+              Verify whether technician capacity and spare parts are confirmed for your
+              specific appliance type in your area.
+            </p>
             <div className="field">
               <label className="field-label" htmlFor="coverage-location">
                 City or PIN code <span className="required">*</span>
@@ -95,7 +105,7 @@ export default function Locations() {
                   setResult(null);
                   setError("");
                 }}
-                placeholder="Your city or 6-digit PIN code"
+                placeholder="e.g. 222001 or Jaunpur"
                 aria-describedby={error ? "coverage-error" : undefined}
               />
             </div>
@@ -135,7 +145,7 @@ export default function Locations() {
               ) : (
                 <Search size={16} />
               )}
-              Check Availability
+              Verify Appliance Coverage
             </button>
             {result && (
               <div className="coverage-result" role="status">
@@ -162,6 +172,7 @@ export default function Locations() {
               </div>
             )}
           </form>
+
           <div className="coverage-copy">
             <p className="eyebrow">
               <span />
@@ -174,24 +185,17 @@ export default function Locations() {
               <br />A confirmed next step.
             </h2>
             <p>
-              Service coverage can vary by appliance, brand, type of work, and
-              local capacity. An area listing is not a guaranteed appointment.
+              Service coverage can vary by appliance type, brand, spare part availability,
+              and technician schedule. An area listing confirms our service reach.
             </p>
             <CheckList
               items={[
-                "Share your exact city and PIN code.",
-                "Tell us the appliance category and service needed.",
-                "Wait for the team to confirm scope and charges.",
-                "Agree on arrangements before a visit is booked.",
+                "Enter your exact 6-digit PIN code for instant verification.",
+                "View related head offices and sub-district post offices.",
+                "Click 'Enquire on WhatsApp' for rapid confirmation with our coordination desk.",
+                "Transparent diagnostic charges agreed before any visit.",
               ]}
             />
-            {!business.coveragePublished && (
-              <p>
-                Verified service-area data has not yet been published. Until it
-                is configured, this checker will ask you to contact the team
-                rather than confirm availability.
-              </p>
-            )}
           </div>
         </div>
       </section>

@@ -11,6 +11,8 @@ import Partnerships from "./pages/Partnerships";
 import Locations from "./pages/Locations";
 import Contact from "./pages/Contact";
 import Feedback from "./pages/Feedback";
+import AdminDashboard from "./pages/AdminDashboard";
+import TechnicianPortal from "./pages/TechnicianPortal";
 import Legal, { NotFound } from "./pages/Legal";
 import { FAQ, PageHero, SEO } from "./components/UI";
 
@@ -31,6 +33,8 @@ export default function App() {
             <Route path="service-locations" element={<Locations />} />
             <Route path="contact" element={<Contact />} />
             <Route path="feedback" element={<Feedback />} />
+            <Route path="admin" element={<AdminDashboard />} />
+            <Route path="technician" element={<TechnicianPortal />} />
             <Route
               path="faq"
               element={

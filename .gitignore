@@ -10,3 +10,4 @@ artifacts/
 *.log
 *.sqlite*
 enquiries-export*.json
+*.xlsx

@@ -64,6 +64,10 @@ export function getConfig(overrides = {}) {
       projectRoot,
       process.env.SERVICE_AREAS_FILE || "config/service-areas.json",
     ),
+    pincodesFile: resolve(
+      projectRoot,
+      process.env.PINCODES_FILE || "config/pincodes.json",
+    ),
     siteUrl,
     retentionDays,
     trustProxy,

@@ -25,9 +25,8 @@ export const navigation = [
   { label: "Products", path: "/products" },
   { label: "Services", path: "/services" },
   { label: "AMC Plans", path: "/amc-maintenance" },
-  { label: "Careers", path: "/careers" },
-  { label: "Brand Partnerships", path: "/partnerships" },
-  { label: "Reviews", path: "/feedback" },
+  { label: "Technician Portal", path: "/technician" },
+  { label: "Admin Dashboard", path: "/admin" },
   { label: "Contact Us", path: "/contact" },
 ];
 

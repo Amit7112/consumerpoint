@@ -12,6 +12,7 @@ import {
   SEO,
 } from "../components/UI";
 import { ProductGrid } from "../components/Products";
+import PinCodeChecker from "../components/PinCodeChecker";
 
 const homeReviews = [
   {
@@ -344,6 +345,25 @@ export default function Home() {
 
             <div className="home-feedback-cta">
               <ButtonLink to="/feedback">Read All Customer Reviews & Give Feedback</ButtonLink>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Home Service Availability Section */}
+      <section className="section home-pincode-section">
+        <div className="container">
+          <Reveal>
+            <PinCodeChecker showDirectory={false} compact={true} />
+            <div style={{ textAlign: "center", marginTop: "28px" }}>
+              <Link
+                to="/service-locations#location-directory"
+                className="text-link"
+                style={{ justifyContent: "center", fontSize: "14px", fontWeight: 600 }}
+              >
+                Browse complete directory of 430+ locations & post offices
+                <ArrowUpRight size={16} />
+              </Link>
             </div>
           </Reveal>
         </div>
