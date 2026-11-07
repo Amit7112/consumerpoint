@@ -118,7 +118,7 @@ export function createStore(config) {
     const seedReviews = [
       {
         id: "FB-SEEDA1",
-        name: "Rahul Sharma",
+        name: "Vikram Sharma",
         service: "Air Conditioners",
         rating: 5,
         comment:
@@ -127,7 +127,7 @@ export function createStore(config) {
       },
       {
         id: "FB-SEEDA2",
-        name: "Priya Venkatesh",
+        name: "Sourav Singh",
         service: "Washing Machines",
         rating: 5,
         comment:
@@ -136,7 +136,7 @@ export function createStore(config) {
       },
       {
         id: "FB-SEEDA3",
-        name: "Aniket Kulkarni",
+        name: "Aditya Kumar",
         service: "AMC & Maintenance",
         rating: 5,
         comment:
@@ -145,7 +145,7 @@ export function createStore(config) {
       },
       {
         id: "FB-SEEDA4",
-        name: "Sunita Deshmukh",
+        name: "Manoj Prajapati",
         service: "Refrigerators",
         rating: 4,
         comment:

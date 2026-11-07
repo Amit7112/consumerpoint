@@ -103,25 +103,6 @@ export default function Home() {
         <div className="hero-bottom-line" />
       </section>
 
-      {/* Prominently Highlighted Service Availability Section */}
-      <section className="section home-pincode-section" id="check-service-availability">
-        <div className="container">
-          <Reveal>
-            <PinCodeChecker showDirectory={false} compact={true} />
-            <div style={{ textAlign: "center", marginTop: "24px" }}>
-              <Link
-                to="/service-locations#location-directory"
-                className="text-link"
-                style={{ justifyContent: "center", fontSize: "14px", fontWeight: 600 }}
-              >
-                Browse complete directory of 430+ locations & post offices
-                <ArrowUpRight size={16} />
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       <section className="section core-services">
         <div className="container">
           <Reveal>
@@ -301,6 +282,25 @@ export default function Home() {
               <ButtonLink to="/services#service-request" secondary light>
                 Request a Service
               </ButtonLink>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Service Availability Checker - positioned right before the Customer Feedback & Reviews system */}
+      <section className="section home-pincode-section" id="check-service-availability">
+        <div className="container">
+          <Reveal>
+            <PinCodeChecker showDirectory={false} compact={true} />
+            <div style={{ textAlign: "center", marginTop: "24px" }}>
+              <Link
+                to="/service-locations#location-directory"
+                className="text-link"
+                style={{ justifyContent: "center", fontSize: "14px", fontWeight: 600 }}
+              >
+                Browse complete directory of 430+ locations & post offices
+                <ArrowUpRight size={16} />
+              </Link>
             </div>
           </Reveal>
         </div>

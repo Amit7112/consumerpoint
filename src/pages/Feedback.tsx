@@ -38,16 +38,81 @@ const ratingLabels: Record<number, { text: string; color: string }> = {
   1: { text: "Poor - Unsatisfactory", color: "#ef4444" },
 };
 
+const defaultFeedbackItems: FeedbackItem[] = [
+  {
+    id: "FB-SEEDA1",
+    name: "Vikram Sharma",
+    service: "Air Conditioners",
+    rating: 5,
+    comment:
+      "Prompt AC servicing before summer peak. The technician arrived on time, thoroughly cleaned both indoor and outdoor units, checked gas pressure, and gave clear preventive advice.",
+    createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+    verified: true,
+  },
+  {
+    id: "FB-SEEDA2",
+    name: "Sourav Singh",
+    service: "Washing Machines",
+    rating: 5,
+    comment:
+      "Repaired our front-load washing machine drum issue with genuine parts. The diagnosis was honest and transparent, unlike other repair providers we called previously.",
+    createdAt: new Date(Date.now() - 7 * 86400000).toISOString(),
+    verified: true,
+  },
+  {
+    id: "FB-SEEDA3",
+    name: "Aditya Kumar",
+    service: "AMC & Maintenance",
+    rating: 5,
+    comment:
+      "Enrolled in the Comprehensive AMC for our home appliances. The scheduled maintenance visit was super smooth and thorough. Great value and peace of mind.",
+    createdAt: new Date(Date.now() - 12 * 86400000).toISOString(),
+    verified: true,
+  },
+  {
+    id: "FB-SEEDA4",
+    name: "Manoj Prajapati",
+    service: "Refrigerators",
+    rating: 4,
+    comment:
+      "Technician fixed our double-door refrigerator's cooling coil problem within an hour. Professional behavior, wore shoe covers, and left the work area clean.",
+    createdAt: new Date(Date.now() - 18 * 86400000).toISOString(),
+    verified: true,
+  },
+  {
+    id: "FB-SEEDA5",
+    name: "Vikram Patel",
+    service: "Televisions",
+    rating: 5,
+    comment:
+      "Professional wall-mounting and display calibration for our 65-inch television. Clean wire routing and proper bracket alignment. Very impressed with the care taken.",
+    createdAt: new Date(Date.now() - 25 * 86400000).toISOString(),
+    verified: true,
+  },
+  {
+    id: "FB-SEEDA6",
+    name: "Meera Nair",
+    service: "Water Purifiers",
+    rating: 5,
+    comment:
+      "Quick membrane replacement and complete sanitization for our RO water purifier. Checked water TDS level before and after service. Courteous technician.",
+    createdAt: new Date(Date.now() - 32 * 86400000).toISOString(),
+    verified: true,
+  },
+];
+
+const defaultSummary: FeedbackSummary = {
+  total: 6,
+  average: 4.8,
+  breakdown: { 5: 5, 4: 1, 3: 0, 2: 0, 1: 0 },
+};
+
 export default function FeedbackPage() {
-  const [items, setItems] = useState<FeedbackItem[]>([]);
-  const [summary, setSummary] = useState<FeedbackSummary>({
-    total: 0,
-    average: 5.0,
-    breakdown: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
-  });
+  const [items, setItems] = useState<FeedbackItem[]>(defaultFeedbackItems);
+  const [summary, setSummary] = useState<FeedbackSummary>(defaultSummary);
   const [selectedService, setSelectedService] = useState<string>("All");
   const [selectedRating, setSelectedRating] = useState<number | "All">("All");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Form states
   const [rating, setRating] = useState<number>(5);
@@ -381,7 +446,7 @@ export default function FeedbackPage() {
                         id="feedback-name"
                         type="text"
                         className="form-input"
-                        placeholder="e.g. Rahul Sharma"
+                        placeholder="e.g. Vikram Sharma"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         minLength={2}
