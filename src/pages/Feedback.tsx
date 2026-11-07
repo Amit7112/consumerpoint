@@ -243,14 +243,14 @@ export default function FeedbackPage() {
     <>
       <SEO
         title="Customer Feedback & Service Reviews"
-        description="Read verified customer reviews and share your experience with Consumer Point home appliance sales, installation, repairs, and AMC maintenance."
+        description="Read verified customer reviews and share your experience with Consumer Point home appliance installation, repairs, and AMC maintenance."
       />
 
       <PageHero
         eyebrow="Customer Reviews & Ratings"
         title="Real experiences from homes we serve."
       >
-        Read genuine feedback from verified appliance sales and service customers,
+        Read genuine feedback from verified appliance service and maintenance customers,
         or share your own thoughts to help us keep improving.
       </PageHero>
 

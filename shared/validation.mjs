@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const enquiryTypes = [
-  "Product Enquiry",
   "Service Request",
   "Installation",
-  "AMC",
+  "AMC Maintenance",
   "Brand Partnership",
   "General Enquiry",
+  "Product Enquiry",
 ];
 export const applianceCategories = [
   "Air Conditioners",

@@ -52,8 +52,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Home Appliance Sales, Service & Installation"
-        description="A better experience for every home. Explore Consumer Point home appliances, repair enquiries, AC installation, preventive maintenance, and business partnerships."
+        title="Home Appliance Service, Repair & Installation"
+        description="Expert home appliance repair, AC installation, preventive maintenance, and Comprehensive AMC services across Uttar Pradesh."
       />
       <section className="hero">
         <motion.img
@@ -88,9 +88,9 @@ export default function Home() {
               for <span>every home.</span>
             </h1>
             <p className="hero-description">
-              Your trusted destination for home-appliance sales,
+              Your trusted partner for home appliance repairs,
               <br className="desktop-break" /> professional installation, and
-              dependable service support.
+              dependable preventive maintenance.
             </p>
             <div className="button-group">
               <ButtonLink to="/services">Explore Our Services</ButtonLink>
@@ -147,22 +147,21 @@ export default function Home() {
         <div className="container">
           <Reveal className="section-heading-row">
             <SectionHeading
-              eyebrow="GOOD CHOICES. BETTER EVERYDAYS."
+              eyebrow="APPLIANCE CARE &amp; SERVICE EXCELLENCE"
               title={
                 <>
-                  Find the right appliances
-                  <br className="desktop-break" /> for your home.
+                  Appliances we service,
+                  <br className="desktop-break" /> repair &amp; maintain.
                 </>
               }
             >
-              Every room. Every routine. Something that fits just right.
+              From precision AC cooling to washing machines and refrigerators — complete upkeep for every essential home appliance.
             </SectionHeading>
-            <ArrowLink to="/products">Explore all products</ArrowLink>
+            <ArrowLink to="/services">Explore all services</ArrowLink>
           </Reveal>
           <ProductGrid />
           <p className="section-footnote">
-            Product images are illustrative. Models, specifications, pricing,
-            and availability are confirmed on enquiry.
+            Appliance images are illustrative. Service availability, spare parts, and technician scheduling are confirmed on enquiry.
           </p>
         </div>
       </section>

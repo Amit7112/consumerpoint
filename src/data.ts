@@ -22,12 +22,12 @@ import {
 export const navigation = [
   { label: "Home", path: "/" },
   { label: "About Us", path: "/about" },
-  { label: "Products", path: "/products" },
   { label: "Services", path: "/services" },
   { label: "AMC Plans", path: "/amc-maintenance" },
-  { label: "Careers", path: "/careers" },
-  { label: "Brand Partnerships", path: "/partnerships" },
+  { label: "Service Locations", path: "/service-locations" },
   { label: "Reviews", path: "/feedback" },
+  { label: "Brand Partnerships", path: "/partnerships" },
+  { label: "Careers", path: "/careers" },
   { label: "Contact Us", path: "/contact" },
 ];
 

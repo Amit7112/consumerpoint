@@ -14,16 +14,16 @@ export function ProductGrid({
         <Reveal key={item.id} delay={(index % 4) * 0.04}>
           <Link
             className="product-card"
-            to={`/contact?type=Product%20Enquiry&category=${encodeURIComponent(item.name)}#enquiry-form`}
-            aria-label={`Enquire about ${item.name}`}
+            to={`/contact?type=Service%20Request&category=${encodeURIComponent(item.name)}#enquiry-form`}
+            aria-label={`Book service or repair for ${item.name}`}
           >
             <div className="product-image">
               <img
                 src={`/images/${item.image}.webp`}
                 alt={
                   item.name === "Televisions"
-                    ? "Modern flat-screen television displaying an ocean landscape"
-                    : `${item.name} - illustrative appliance photography`
+                    ? "Modern flat-screen television wall mounting and display calibration"
+                    : `${item.name} repair, installation and maintenance service - Consumer Point`
                 }
                 width="500"
                 height="500"
@@ -37,7 +37,7 @@ export function ProductGrid({
               <h3>{item.name}</h3>
               <p>{item.short}</p>
               <span className="product-enquire">
-                Make an enquiry
+                Book Service / Repair
                 <ArrowUpRight size={14} />
               </span>
             </div>

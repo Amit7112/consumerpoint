@@ -48,7 +48,7 @@ export default function About() {
     <>
       <SEO
         title="About Us"
-        description="Meet Consumer Point, a customer-focused home-appliance business bringing sales, installation enquiries, service support, and maintenance together."
+        description="Meet Consumer Point, a customer-focused home appliance service network bringing professional repair, installation enquiries, and preventive maintenance together."
       />
       <PageHero
         eyebrow="About Us"
@@ -60,9 +60,9 @@ export default function About() {
           </>
         }
       >
-        Consumer Point brings together home-appliance sales, installation
-        coordination, and service support with a simple focus: making your
-        experience easier.
+        Consumer Point brings together home appliance repair, installation
+        coordination, and preventive maintenance support with a simple focus: making your
+        appliance ownership seamless.
       </PageHero>
       <section className="section">
         <div className="container editorial-grid">
@@ -81,10 +81,10 @@ export default function About() {
               turn when something needs attention all matter.
             </p>
             <p>
-              Consumer Point is a customer-focused home-appliance business
-              connecting those needs. We welcome product, installation, repair,
+              Consumer Point is a customer-focused home appliance service network
+              connecting those needs. We welcome installation, repair,
               and maintenance enquiries, as well as conversations with brands
-              and businesses about after-sales coordination.
+              and businesses about after-sales service coordination.
             </p>
             <p>
               We believe in listening first, communicating clearly, and agreeing
@@ -133,7 +133,7 @@ export default function About() {
                 <br />
                 For your home, and beyond.
               </h2>
-              <p>Become a trusted name in home-appliance sales and services.</p>
+              <p>Become the most trusted name in home appliance repair, maintenance, and service delivery.</p>
             </Reveal>
           </div>
           <Reveal>

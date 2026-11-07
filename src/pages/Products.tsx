@@ -17,13 +17,11 @@ export default function Products() {
   return (
     <>
       <SEO
-        title="Home Appliances & Product Enquiries"
-        description="Explore air conditioners, refrigerators, washing machines, televisions, kitchen appliances, water purifiers, and electrical appliance enquiries at Consumer Point."
+        title="Appliances We Service, Repair & Maintain"
+        description="Comprehensive doorstep service, repair, and installation for all major home appliance categories: air conditioners, refrigerators, washing machines, and televisions."
       />
-      <PageHero eyebrow="Products" title="Made for your home. Chosen for you.">
-        Explore our appliance categories and tell us what you have in mind.
-        We'll help you discuss the right requirements, features, and fit for
-        your everyday life.
+      <PageHero eyebrow="Supported Appliances" title="Appliances We Service, Repair & Maintain">
+        From precision air conditioner servicing to front-load washing machines and double-door refrigerators — our verified technicians deliver expert repair, genuine parts, and scheduled maintenance.
       </PageHero>
       <section className="section products-section">
         <div className="container">
@@ -95,10 +93,9 @@ export default function Products() {
           <div className="notice catalog-notice">
             <Info size={19} />
             <p>
-              These are enquiry categories, not a live product catalogue. Images
-              are illustrative. Model, brand, specifications, pricing, stock,
-              and delivery details must be confirmed by the team. No authorised
-              dealership relationship is implied.
+              These are supported appliance service and maintenance categories. Images
+              are illustrative. Service availability, spare parts, and technician scheduling
+              must be confirmed by the team. No authorised dealership or retail sales relationship is implied.
             </p>
           </div>
         </div>

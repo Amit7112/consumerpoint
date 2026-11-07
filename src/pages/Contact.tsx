@@ -43,7 +43,7 @@ export default function Contact() {
     <>
       <SEO
         title="Contact & Enquiries"
-        description="Contact Consumer Point for appliance sales enquiries, service requests, installation, AMC proposals, and brand partnerships through our secure enquiry form."
+        description="Contact Consumer Point for appliance repair enquiries, service requests, installation, AMC proposals, and brand partnerships through our secure enquiry form."
       />
       <PageHero
         eyebrow="Contact Us"

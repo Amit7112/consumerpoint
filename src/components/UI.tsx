@@ -330,7 +330,7 @@ export function SEO({
     setMeta("property", "og:image", ogImage);
     setMeta("property", "og:image:width", "1200");
     setMeta("property", "og:image:height", "630");
-    setMeta("property", "og:image:alt", "Consumer Point Home Appliance Sales, Service and Installation");
+    setMeta("property", "og:image:alt", "Consumer Point Home Appliance Service, Repair and Installation");
 
     // 5. Twitter / X Cards
     setMeta("name", "twitter:card", "summary_large_image");

@@ -30,7 +30,7 @@ export function Brand({ light = false }: { light?: boolean }) {
       <div className={`brand-logo-container ${light ? "brand-logo-dark-bg" : ""}`}>
         <img
           src="/images/logo-consumer-point.webp"
-          alt="Consumer Point - Sales, Service & Installation"
+          alt="Consumer Point - Appliance Service, Repair & Installation"
           className="brand-logo-image"
           width="138"
           height="48"

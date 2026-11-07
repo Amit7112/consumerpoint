@@ -35,7 +35,7 @@ async function createOgImage() {
       <text x="230" y="84" font-family="sans-serif" font-size="13" font-weight="700" fill="#0369a1" text-anchor="middle" letter-spacing="1.5">VERIFIED SERVICE NETWORK</text>
 
       <!-- Headline -->
-      <text x="80" y="360" font-family="sans-serif" font-size="44" font-weight="800" fill="#06152e">Home Appliance Sales, Service &amp; Installation</text>
+      <text x="80" y="360" font-family="sans-serif" font-size="44" font-weight="800" fill="#06152e">Home Appliance Service, Repair &amp; Installation</text>
       
       <!-- Subheadline -->
       <text x="80" y="415" font-family="sans-serif" font-size="24" font-weight="500" fill="#475569">Air Conditioners • Washing Machines • Refrigerators • Televisions • AMC</text>
