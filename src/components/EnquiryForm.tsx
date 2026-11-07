@@ -343,7 +343,7 @@ export default function EnquiryForm({
         validation.data || values,
         referenceId,
       );
-      const waUrl = getWhatsAppUrl(formatted, "919805350321");
+      const waUrl = getWhatsAppUrl(formatted, "919810863934");
       setWaLink(waUrl);
       try {
         window.open(waUrl, "_blank", "noopener,noreferrer");
@@ -356,7 +356,7 @@ export default function EnquiryForm({
       setFormError(
         error instanceof Error
           ? error.message
-          : "Unable to process. Please contact directly via WhatsApp at 9805350321.",
+          : "Unable to process. Please contact directly via WhatsApp at 9810863934.",
       );
     } finally {
       setLoading(false);
@@ -393,7 +393,7 @@ export default function EnquiryForm({
                 waLink ||
                 getWhatsAppUrl(
                   formatEnquiryForWhatsApp(kind, values, reference),
-                  "919805350321",
+                  "919810863934",
                 )
               }
               target="_blank"
@@ -401,11 +401,11 @@ export default function EnquiryForm({
               className="button button-whatsapp-action"
             >
               <MessageCircle size={18} />
-              Open WhatsApp Chat (9805350321)
+              Open WhatsApp Chat (9810863934)
             </a>
             <p className="whatsapp-help-note">
               Click above to send your complete enquiry directly to{" "}
-              <strong>9805350321</strong> on WhatsApp.
+              <strong>9810863934</strong> on WhatsApp.
             </p>
           </div>
 

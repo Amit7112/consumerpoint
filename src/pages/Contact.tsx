@@ -5,23 +5,24 @@ import EnquiryForm from "../components/EnquiryForm";
 
 export default function Contact() {
   const business = useBusiness();
-  const phone = business.phone || "9805350321";
-  const whatsapp = business.whatsapp || "919805350321";
+  const phone = business.phone || "9810863934";
+  const whatsapp = business.whatsapp || "919810863934";
+  const email = business.email || "support@consumerpoint.co.in";
 
   const details = [
     {
       icon: Phone,
       title: "Call us",
       value: phone,
-      placeholder: "9805350321",
+      placeholder: "9810863934",
       href: `tel:${phone}`,
     },
     {
       icon: Mail,
       title: "Write to us",
-      value: business.email,
-      placeholder: "Business email to be provided",
-      href: business.email ? `mailto:${business.email}` : "",
+      value: email,
+      placeholder: "support@consumerpoint.co.in",
+      href: `mailto:${email}`,
     },
     {
       icon: MapPin,

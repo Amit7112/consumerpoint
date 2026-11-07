@@ -191,11 +191,9 @@ export default function Partnerships() {
               <div>
                 <h3>Business contact</h3>
                 <p>
-                  {business.email ? (
-                    <a href={`mailto:${business.email}`}>{business.email}</a>
-                  ) : (
-                    "Verified business email to be provided. Please use the secure enquiry form."
-                  )}
+                  <a href={`mailto:${business.email || "support@consumerpoint.co.in"}`}>
+                    {business.email || "support@consumerpoint.co.in"}
+                  </a>
                 </p>
               </div>
             </div>

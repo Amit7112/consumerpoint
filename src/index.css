@@ -265,6 +265,33 @@ svg {
   white-space: nowrap;
   flex-shrink: 0;
 }
+.brand-logo-container {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+.brand-logo-image {
+  height: 44px;
+  width: auto;
+  max-width: 145px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.brand:hover .brand-logo-image {
+  transform: scale(1.02);
+}
+.brand-logo-dark-bg {
+  background: #ffffff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+  display: inline-flex;
+  align-items: center;
+}
+.brand-logo-dark-bg .brand-logo-image {
+  height: 38px;
+}
 .brand-mark {
   width: 43px;
   height: 43px;
@@ -3229,6 +3256,10 @@ select.form-control {
   }
   .header-inner .brand {
     gap: 6px;
+  }
+  .header-inner .brand-logo-image {
+    height: 34px;
+    max-width: 110px;
   }
   .header-inner .brand-mark {
     width: 30px;

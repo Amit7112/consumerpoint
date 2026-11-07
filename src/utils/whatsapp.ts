@@ -1,4 +1,4 @@
-export const DEFAULT_WHATSAPP_NUMBER = "919805350321";
+export const DEFAULT_WHATSAPP_NUMBER = "919810863934";
 
 export function getWhatsAppUrl(text?: string, phone?: string): string {
   const target = (phone || DEFAULT_WHATSAPP_NUMBER).replace(/\D/g, "");

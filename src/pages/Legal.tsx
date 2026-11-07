@@ -153,16 +153,11 @@ export default function Legal() {
           <section>
             <h2>Questions or requests</h2>
             <p>
-              {business.email ? (
-                <>
-                  Email{" "}
-                  <a href={`mailto:${business.email}`}>{business.email}</a>{" "}
-                  or{" "}
-                </>
-              ) : (
-                "Until verified direct contact information is published, please "
-              )}
-              <Link to="/contact">use our contact form</Link>. Include your
+              Email{" "}
+              <a href={`mailto:${business.email || "support@consumerpoint.co.in"}`}>
+                {business.email || "support@consumerpoint.co.in"}
+              </a>{" "}
+              or <Link to="/contact">use our contact form</Link>. Include your
               request reference where relevant.
             </p>
           </section>

@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-function getLocationWhatsAppUrl(locationName, district, pincode, phone = "919805350321") {
+function getLocationWhatsAppUrl(locationName, district, pincode, phone = "919810863934") {
   const loc = locationName || "my area";
   const dist = district || "our district";
   const pin = pincode || "my PIN code";
@@ -91,10 +91,10 @@ test("invalid and unserviced PIN codes return empty results", () => {
 });
 
 test("WhatsApp enquiry message formatting conforms to requirement", () => {
-  const url = getLocationWhatsAppUrl("Jaunpur H.O", "Jaunpur", "222001", "919805350321");
-  assert.ok(url.startsWith("https://wa.me/919805350321?text="));
+  const url = getLocationWhatsAppUrl("Jaunpur H.O", "Jaunpur", "222001", "919810863934");
+  assert.ok(url.startsWith("https://wa.me/919810863934?text="));
 
-  const decoded = decodeURIComponent(url.replace("https://wa.me/919805350321?text=", ""));
+  const decoded = decodeURIComponent(url.replace("https://wa.me/919810863934?text=", ""));
   assert.equal(
     decoded,
     "Hello Consumer Point, I want to enquire about service availability in Jaunpur H.O, Jaunpur, PIN Code: 222001. Please assist me.",

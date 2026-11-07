@@ -20,11 +20,11 @@ export type BusinessConfig = {
 
 const defaults: BusinessConfig = {
   name: "Consumer Point",
-  phone: "9805350321",
-  email: "",
+  phone: "9810863934",
+  email: "support@consumerpoint.co.in",
   address: "",
   hours: "Mon - Sat: 9:00 AM - 8:00 PM",
-  whatsapp: "919805350321",
+  whatsapp: "919810863934",
   mapsUrl: "",
   retentionDays: 180,
   coveragePublished: false,
@@ -60,7 +60,7 @@ export function BusinessProvider({ children }: { children: ReactNode }) {
 
 export const useBusiness = () => useContext(BusinessContext);
 export const whatsappUrl = (phone?: string, text?: string) => {
-  const target = (phone || "919805350321").replace(/\D/g, "");
+  const target = (phone || "919810863934").replace(/\D/g, "");
   const defaultText =
     "Hello Consumer Point, I would like to enquire about your appliance services.";
   return `https://wa.me/${target}?text=${encodeURIComponent(text || defaultText)}`;
