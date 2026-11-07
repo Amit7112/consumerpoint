@@ -437,6 +437,7 @@ export default function TechnicianPortal() {
         <SEO
           title="Technician Portal Login — Consumer Point"
           description="Access allocated customer appliance service jobs and manage on-site service status."
+          noindex={true}
         />
         <div className="tech-login-card">
           <div className="tech-login-header">
@@ -513,6 +514,7 @@ export default function TechnicianPortal() {
       <SEO
         title={`Technician Portal (${tech?.name || "Field Tech"}) — Consumer Point`}
         description="View assigned service requests, customer contact information, and update on-site job status."
+        noindex={true}
       />
 
       {/* Top Header */}

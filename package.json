@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "node server/dev.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/build-seo.mjs",
     "preview": "vite preview",
     "start": "node server/index.mjs",
-    "test": "node --test tests/pincodes.test.mjs tests/allocation.test.mjs",
+    "test": "node --test tests/pincodes.test.mjs tests/allocation.test.mjs tests/seo.test.mjs",
     "test:e2e": "playwright test",
     "typecheck": "tsc --noEmit",
     "test:production": "node --test tests/production.test.mjs"

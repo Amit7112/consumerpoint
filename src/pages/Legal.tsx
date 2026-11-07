@@ -173,6 +173,7 @@ export function NotFound() {
       <SEO
         title="Page Not Found"
         description="This Consumer Point page could not be found. Explore our appliances, services, or contact the team."
+        noindex={true}
       />
       <section className="not-found">
         <div className="container">

@@ -1,3 +1,15 @@
+# Consumer Point Robots.txt
+# https://consumerpoint.co.in
+
 User-agent: *
 Allow: /
+
+# Private operational routes & endpoints
 Disallow: /api/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /technician
+Disallow: /technician/
+
+# Crawl delay & sitemap location
+Sitemap: https://consumerpoint.co.in/sitemap.xml

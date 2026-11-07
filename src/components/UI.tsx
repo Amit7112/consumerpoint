@@ -262,28 +262,94 @@ export function RouteEffects() {
 export function SEO({
   title,
   description,
+  noindex = false,
+  canonicalPath,
+  schema,
 }: {
   title: string;
   description: string;
+  noindex?: boolean;
+  canonicalPath?: string;
+  schema?: Record<string, any> | Array<Record<string, any>>;
 }) {
   useEffect(() => {
-    document.title = `${title} | Consumer Point`;
-    const meta = document.querySelector('meta[name="description"]');
-    meta?.setAttribute("content", description);
-    document
-      .querySelector('meta[property="og:title"]')
-      ?.setAttribute("content", `${title} | Consumer Point`);
-    document
-      .querySelector('meta[property="og:description"]')
-      ?.setAttribute("content", description);
-    const canonical = document.querySelector<HTMLLinkElement>(
-      'link[rel="canonical"]',
+    // 1. Title formatting
+    const formattedTitle = title.includes("Consumer Point")
+      ? title
+      : `${title} | Consumer Point`;
+    document.title = formattedTitle;
+
+    // Helper to get or create a tag
+    const setMeta = (attr: string, key: string, content: string) => {
+      let el = document.querySelector(`meta[${attr}="${key}"]`);
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute(attr, key);
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", content);
+    };
+
+    // 2. Primary Meta Tags
+    setMeta("name", "description", description);
+    setMeta(
+      "name",
+      "robots",
+      noindex
+        ? "noindex, nofollow"
+        : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     );
-    if (canonical)
-      canonical.href = new URL(
-        window.location.pathname.replace(/\/$/, "") || "/",
-        canonical.href,
-      ).href;
-  }, [title, description]);
+    setMeta("name", "author", "Consumer Point");
+    setMeta("name", "geo.region", "IN-UP");
+    setMeta("name", "geo.placename", "Uttar Pradesh, India");
+
+    // 3. Canonical URL
+    const origin =
+      window.location.origin === "null" || !window.location.origin.startsWith("http")
+        ? "https://consumerpoint.co.in"
+        : window.location.origin;
+    const targetPath = canonicalPath || window.location.pathname.replace(/\/$/, "") || "/";
+    const canonicalHref = `${origin}${targetPath}`;
+
+    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalHref;
+
+    // 4. Open Graph Metadata
+    const ogImage = `${origin}/images/og-image.jpg`;
+    setMeta("property", "og:title", formattedTitle);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", canonicalHref);
+    setMeta("property", "og:type", "website");
+    setMeta("property", "og:site_name", "Consumer Point");
+    setMeta("property", "og:locale", "en_IN");
+    setMeta("property", "og:image", ogImage);
+    setMeta("property", "og:image:width", "1200");
+    setMeta("property", "og:image:height", "630");
+    setMeta("property", "og:image:alt", "Consumer Point Home Appliance Sales, Service and Installation");
+
+    // 5. Twitter / X Cards
+    setMeta("name", "twitter:card", "summary_large_image");
+    setMeta("name", "twitter:title", formattedTitle);
+    setMeta("name", "twitter:description", description);
+    setMeta("name", "twitter:image", ogImage);
+
+    // 6. Schema.org JSON-LD Structured Data
+    if (schema) {
+      let scriptTag = document.querySelector<HTMLScriptElement>("#schema-seo-dynamic");
+      if (!scriptTag) {
+        scriptTag = document.createElement("script");
+        scriptTag.id = "schema-seo-dynamic";
+        scriptTag.type = "application/ld+json";
+        document.head.appendChild(scriptTag);
+      }
+      scriptTag.textContent = JSON.stringify(schema);
+    }
+  }, [title, description, noindex, canonicalPath, schema]);
+
   return null;
 }

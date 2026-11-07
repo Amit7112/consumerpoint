@@ -427,6 +427,7 @@ export default function AdminDashboard() {
         <SEO
           title="Admin Login — Consumer Point Management"
           description="Secure access to Consumer Point technician management and service allocation system."
+          noindex={true}
         />
         <div className="admin-login-card">
           <div className="admin-login-header">
@@ -528,6 +529,7 @@ export default function AdminDashboard() {
       <SEO
         title="Admin Service Dashboard — Consumer Point"
         description="Comprehensive technician management, coverage mapping, and service allocation operations."
+        noindex={true}
       />
 
       {/* Top Bar */}
