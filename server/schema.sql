@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS enquiries (
   id TEXT PRIMARY KEY,
   created_at TEXT NOT NULL,
   kind TEXT NOT NULL CHECK(kind IN ('contact', 'service', 'amc', 'partnership', 'career')),
-  status TEXT NOT NULL DEFAULT 'new' CHECK(status IN ('new', 'reviewing', 'closed')),
+  status TEXT NOT NULL DEFAULT 'Pending' CHECK(status IN ('Pending', 'In Progress', 'Completed', 'new', 'reviewing', 'closed')),
   ciphertext BLOB NOT NULL,
   iv BLOB NOT NULL,
   auth_tag BLOB NOT NULL,

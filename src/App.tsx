@@ -12,7 +12,6 @@ import Locations from "./pages/Locations";
 import Contact from "./pages/Contact";
 import Feedback from "./pages/Feedback";
 import AdminDashboard from "./pages/AdminDashboard";
-import TechnicianPortal from "./pages/TechnicianPortal";
 import Legal, { NotFound } from "./pages/Legal";
 import { FAQ, PageHero, SEO } from "./components/UI";
 
@@ -34,7 +33,7 @@ export default function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="feedback" element={<Feedback />} />
             <Route path="admin" element={<AdminDashboard />} />
-            <Route path="technician" element={<TechnicianPortal />} />
+            <Route path="technician" element={<Navigate to="/admin" replace />} />
             <Route
               path="faq"
               element={

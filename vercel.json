@@ -71,6 +71,10 @@
       "destination": "/robots.txt"
     },
     {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
       "source": "/((?!api/|images/|favicon.svg|robots.txt|sitemap.xml).*)",
       "destination": "/index.html"
     }

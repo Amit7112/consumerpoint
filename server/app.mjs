@@ -14,6 +14,7 @@ import { applianceCategories, validateEnquiry, validateFeedback } from "../share
 import { getConfig } from "./config.mjs";
 import { createStore } from "./store.mjs";
 import { allocateTechnician } from "./allocation.mjs";
+import { sendAdminEnquiryEmail } from "./email.mjs";
 
 export function createApp(options = {}) {
   const config = options.config || getConfig();
@@ -345,60 +346,28 @@ export function createApp(options = {}) {
     // 1. Save original encrypted enquiry
     const reference = store.save(kind, validation.data, hash);
 
-    // 2. Automatic Technician Allocation for Service Enquiries
-    let createdJobId = null;
-    let allocationSummary = null;
-
-    if (kind === "service") {
-      try {
-        const pin = String(validation.data.pin || "").trim();
-        const cat = String(validation.data.category || "").trim();
-        const alloc = allocateTechnician({
-          pincode: pin,
-          applianceCategory: cat,
-          store,
-        });
-
-        const job = store.createServiceJob({
-          customer_name: validation.data.name,
-          customer_phone: validation.data.phone,
-          customer_email: validation.data.email || "",
-          customer_pincode: pin,
-          district: validation.data.city || "",
-          locality: validation.data.city || "",
-          address: validation.data.address || validation.data.city || "",
-          appliance_category: cat,
-          service_type: "Service / Repair",
-          problem_description: `${validation.data.brandModel ? `[Model: ${validation.data.brandModel}] ` : ""}${validation.data.message || ""}`.trim(),
-          priority: "Normal",
-          primary_tech_id: alloc.primaryTechId,
-          backup_tech_id: alloc.backupTechId,
-          assigned_tech_id: alloc.assignedTechId,
-          assignment_status: alloc.assignmentStatus,
-          job_status: alloc.jobStatus,
-          admin_notes: alloc.reason,
-          enquiry_ref: reference,
-        });
-
-        createdJobId = job.id;
-        allocationSummary = {
-          jobId: job.id,
-          assignmentStatus: job.assignment_status,
-          status: job.job_status,
-        };
-      } catch (err) {
-        console.error("Auto allocation warning:", err.message);
-      }
-    }
+    // 2. Dispatch non-blocking Resend email notification to admin
+    sendAdminEnquiryEmail({
+      reference,
+      kind,
+      name: validation.data.name,
+      phone: validation.data.phone,
+      email: validation.data.email,
+      service: validation.data.category || validation.data.service || kind,
+      message: validation.data.message || validation.data.details,
+      pincode: validation.data.pin || validation.data.pincode,
+      city: validation.data.city,
+      address: validation.data.address,
+      brandModel: validation.data.brandModel,
+      createdAt: new Date().toISOString(),
+    }).catch((err) =>
+      console.warn("[Email Notification Error]", err?.message || err),
+    );
 
     return res.status(201).json({
       reference,
-      jobId: createdJobId,
-      allocation: allocationSummary,
       message:
-        createdJobId
-          ? `Your service request has been registered under Request ID #${createdJobId}. A technician is being assigned.`
-          : "Your enquiry has been securely recorded. This is not a confirmed appointment.",
+        "Your enquiry has been securely recorded. Our team will contact you shortly.",
     });
   });
 
@@ -504,10 +473,161 @@ export function createApp(options = {}) {
   });
 
   // =========================================================================
-  // ADMIN DASHBOARD & MANAGEMENT API
+  // ADMIN DASHBOARD & MANAGEMENT API (Simplified Customer Enquiry Management)
   // =========================================================================
   app.get("/api/admin/stats", requireAdmin, (_req, res) => {
-    return res.json(store.getDashboardStats());
+    const enquiries = store.listEnquiries();
+    const feedback = store.getFeedbackListAll();
+    const pending = enquiries.filter((e) => e.status === "Pending").length;
+    const inProgress = enquiries.filter((e) => e.status === "In Progress").length;
+    const completed = enquiries.filter((e) => e.status === "Completed").length;
+    return res.json({
+      enquiries: {
+        total: enquiries.length,
+        pending,
+        inProgress,
+        completed,
+      },
+      feedback: {
+        total: feedback.length,
+        average: store.getFeedbackSummary()?.average || 5,
+      },
+      ...store.getDashboardStats(),
+    });
+  });
+
+  // Customer Enquiries listing & filtering
+  app.get("/api/admin/enquiries", requireAdmin, (req, res) => {
+    const { search, status, service, date } = req.query;
+    const items = store.listEnquiries({
+      search: search ? String(search) : undefined,
+      status: status ? String(status) : undefined,
+      service: service ? String(service) : undefined,
+      date: date ? String(date) : undefined,
+    });
+    return res.json({ items, total: items.length });
+  });
+
+  // Enquiry Status Update (Pending / In Progress / Completed)
+  const handleEnquiryStatusUpdate = (req, res) => {
+    const { status } = req.body || {};
+    if (!status || !["Pending", "In Progress", "Completed"].includes(status)) {
+      return res.status(422).json({
+        message: "Invalid status. Allowed values: Pending, In Progress, Completed.",
+      });
+    }
+    const ok = store.updateEnquiryStatus(req.params.id, status);
+    if (!ok) {
+      return res.status(404).json({ message: "Enquiry not found or update failed." });
+    }
+    return res.json({ success: true, message: `Enquiry status updated to ${status}.` });
+  };
+  app.patch("/api/admin/enquiries/:id/status", requireAdmin, handleEnquiryStatusUpdate);
+  app.put("/api/admin/enquiries/:id/status", requireAdmin, handleEnquiryStatusUpdate);
+
+  // Customer Feedback listing
+  app.get("/api/admin/feedback", requireAdmin, (_req, res) => {
+    const items = store.getFeedbackListAll();
+    return res.json({
+      items,
+      total: items.length,
+      summary: store.getFeedbackSummary(),
+    });
+  });
+
+  // CSV Export Helpers
+  function escapeCSVCell(val) {
+    if (val === null || val === undefined) return '""';
+    const str = String(val).replace(/"/g, '""');
+    return `"${str}"`;
+  }
+
+  // Export Enquiries as CSV
+  app.get("/api/admin/export/enquiries", requireAdmin, (_req, res) => {
+    const enquiries = store.listEnquiries();
+    const headers = [
+      "Reference ID",
+      "Submission Date (IST)",
+      "Status",
+      "Customer Name",
+      "Mobile Number",
+      "Email Address",
+      "Service Requested",
+      "Brand / Model",
+      "PIN Code",
+      "City / Location",
+      "Customer Address",
+      "Customer Message",
+    ];
+
+    const rows = enquiries.map((e) => [
+      escapeCSVCell(e.id),
+      escapeCSVCell(
+        new Date(e.createdAt).toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        }),
+      ),
+      escapeCSVCell(e.status),
+      escapeCSVCell(e.name),
+      escapeCSVCell(e.phone),
+      escapeCSVCell(e.email || ""),
+      escapeCSVCell(e.service),
+      escapeCSVCell(e.brandModel || ""),
+      escapeCSVCell(e.pincode || ""),
+      escapeCSVCell(e.city || ""),
+      escapeCSVCell(e.address || ""),
+      escapeCSVCell(e.message || ""),
+    ]);
+
+    const csvContent =
+      "\uFEFF" +
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+
+    res.set({
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": 'attachment; filename="consumer-point-enquiries.csv"',
+    });
+    return res.send(csvContent);
+  });
+
+  // Export Feedback as CSV
+  app.get("/api/admin/export/feedback", requireAdmin, (_req, res) => {
+    const feedback = store.getFeedbackListAll();
+    const headers = [
+      "Review ID",
+      "Submission Date (IST)",
+      "Customer Name",
+      "Rating (Stars)",
+      "Service Category",
+      "Customer Review Comment",
+      "Status",
+      "Verified Customer",
+    ];
+
+    const rows = feedback.map((f) => [
+      escapeCSVCell(f.id),
+      escapeCSVCell(
+        new Date(f.createdAt).toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata",
+        }),
+      ),
+      escapeCSVCell(f.name),
+      escapeCSVCell(f.rating),
+      escapeCSVCell(f.service),
+      escapeCSVCell(f.comment),
+      escapeCSVCell(f.status || "published"),
+      escapeCSVCell(f.verified ? "Yes" : "No"),
+    ]);
+
+    const csvContent =
+      "\uFEFF" +
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+
+    res.set({
+      "Content-Type": "text/csv; charset=utf-8",
+      "Content-Disposition": 'attachment; filename="consumer-point-feedback.csv"',
+    });
+    return res.send(csvContent);
   });
 
   // Technician management

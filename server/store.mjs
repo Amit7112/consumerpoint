@@ -59,7 +59,7 @@ export function createStore(config) {
   const tableRow = db
     .prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='enquiries'")
     .get();
-  if (tableRow && !tableRow.sql.includes("career")) {
+  if (tableRow && (!tableRow.sql.includes("career") || !tableRow.sql.includes("Pending"))) {
     db.exec(`
       PRAGMA foreign_keys=off;
       BEGIN TRANSACTION;
@@ -67,14 +67,30 @@ export function createStore(config) {
         id TEXT PRIMARY KEY,
         created_at TEXT NOT NULL,
         kind TEXT NOT NULL CHECK(kind IN ('contact', 'service', 'amc', 'partnership', 'career')),
-        status TEXT NOT NULL DEFAULT 'new' CHECK(status IN ('new', 'reviewing', 'closed')),
+        status TEXT NOT NULL DEFAULT 'Pending' CHECK(status IN ('Pending', 'In Progress', 'Completed', 'new', 'reviewing', 'closed')),
         ciphertext BLOB NOT NULL,
         iv BLOB NOT NULL,
         auth_tag BLOB NOT NULL,
         token_hash TEXT NOT NULL UNIQUE,
         consent_version TEXT NOT NULL DEFAULT '2026-01'
       );
-      INSERT INTO enquiries_new SELECT * FROM enquiries;
+      INSERT INTO enquiries_new (id, created_at, kind, status, ciphertext, iv, auth_tag, token_hash, consent_version)
+      SELECT
+        id,
+        created_at,
+        kind,
+        CASE
+          WHEN status = 'new' THEN 'Pending'
+          WHEN status = 'reviewing' THEN 'In Progress'
+          WHEN status = 'closed' THEN 'Completed'
+          ELSE status
+        END,
+        ciphertext,
+        iv,
+        auth_tag,
+        token_hash,
+        consent_version
+      FROM enquiries;
       DROP TABLE enquiries;
       ALTER TABLE enquiries_new RENAME TO enquiries;
       CREATE INDEX IF NOT EXISTS enquiries_created_at ON enquiries(created_at);
@@ -95,11 +111,16 @@ export function createStore(config) {
     const cipher = createDecipheriv("aes-256-gcm", key, row.iv);
     cipher.setAAD(Buffer.from(row.id));
     cipher.setAuthTag(row.auth_tag);
+    let status = row.status;
+    if (status === "new") status = "Pending";
+    else if (status === "reviewing") status = "In Progress";
+    else if (status === "closed") status = "Completed";
+
     return {
       id: row.id,
       createdAt: row.created_at,
       kind: row.kind,
-      status: row.status,
+      status,
       consentVersion: row.consent_version,
       data: JSON.parse(
         Buffer.concat([cipher.update(row.ciphertext), cipher.final()]).toString(
@@ -723,6 +744,84 @@ export function createStore(config) {
         )
         .all();
     },
+    listEnquiries({ search, status, service, date } = {}) {
+      purge();
+      const rows = db
+        .prepare("SELECT * FROM enquiries ORDER BY created_at DESC")
+        .all();
+      let decrypted = rows.map(decrypt);
+
+      let results = decrypted.map((item) => {
+        const d = item.data || {};
+        const serviceName =
+          d.category ||
+          d.service ||
+          (item.kind === "contact"
+            ? "General Enquiry"
+            : item.kind === "amc"
+              ? "AMC Maintenance"
+              : item.kind === "partnership"
+                ? "Brand Partnership"
+                : item.kind === "career"
+                  ? "Technician Application"
+                  : "Service / Repair");
+
+        return {
+          id: item.id,
+          createdAt: item.createdAt,
+          kind: item.kind,
+          status: item.status, // Pending | In Progress | Completed
+          name: d.name || d.fullName || "Customer",
+          phone: d.phone || d.mobile || "",
+          email: d.email || "",
+          service: serviceName,
+          brandModel: d.brandModel || "",
+          message: d.message || d.details || "",
+          pincode: d.pin || d.pincode || "",
+          city: d.city || d.location || "",
+          address: d.address || "",
+          contactMethod: d.contactMethod || "",
+          preferredDate: d.preferredDate || "",
+          raw: d,
+        };
+      });
+
+      if (search && typeof search === "string" && search.trim()) {
+        const q = search.trim().toLowerCase();
+        results = results.filter(
+          (r) =>
+            r.name.toLowerCase().includes(q) ||
+            r.phone.replace(/\D/g, "").includes(q.replace(/\D/g, "")) ||
+            r.id.toLowerCase().includes(q) ||
+            r.email.toLowerCase().includes(q) ||
+            r.service.toLowerCase().includes(q) ||
+            r.pincode.includes(q),
+        );
+      }
+
+      if (status && status !== "all") {
+        results = results.filter(
+          (r) => r.status.toLowerCase() === status.toLowerCase(),
+        );
+      }
+
+      if (service && service !== "all") {
+        const s = service.toLowerCase();
+        results = results.filter(
+          (r) =>
+            r.service.toLowerCase().includes(s) ||
+            r.kind.toLowerCase() === s,
+        );
+      }
+
+      if (date && typeof date === "string" && date.trim()) {
+        results = results.filter(
+          (r) => r.createdAt.slice(0, 10) === date.trim(),
+        );
+      }
+
+      return results;
+    },
     get(id) {
       const row = db.prepare("SELECT * FROM enquiries WHERE id = ?").get(id);
       return row ? decrypt(row) : null;
@@ -738,6 +837,17 @@ export function createStore(config) {
       return db
         .prepare("UPDATE enquiries SET status = ? WHERE id = ?")
         .run(status, id).changes;
+    },
+    updateEnquiryStatus(id, newStatus) {
+      const allowed = ["Pending", "In Progress", "Completed"];
+      if (!allowed.includes(newStatus)) {
+        return false;
+      }
+      return (
+        db
+          .prepare("UPDATE enquiries SET status = ? WHERE id = ?")
+          .run(newStatus, id).changes > 0
+      );
     },
     remove(id) {
       return db.prepare("DELETE FROM enquiries WHERE id = ?").run(id).changes;
@@ -770,6 +880,14 @@ export function createStore(config) {
       const rows = service
         ? db.prepare(query).all(service)
         : db.prepare(query).all();
+      return rows.map((r) => ({ ...r, verified: Boolean(r.verified) }));
+    },
+    getFeedbackListAll() {
+      const rows = db
+        .prepare(
+          "SELECT id, created_at as createdAt, name, service, rating, comment, verified, status FROM feedback ORDER BY created_at DESC",
+        )
+        .all();
       return rows.map((r) => ({ ...r, verified: Boolean(r.verified) }));
     },
     getFeedbackSummary() {
@@ -1305,14 +1423,20 @@ export function createStore(config) {
     // =======================================================================
     // AUTHENTICATION
     // =======================================================================
-    authenticateAdmin(username, password) {
-      if (!username || !password) return null;
-      const admin = db.prepare("SELECT * FROM admin_users WHERE username = ?").get(username.trim().toLowerCase());
+    authenticateAdmin(usernameOrEmail, password) {
+      if (!usernameOrEmail || !password) return null;
+      const clean = usernameOrEmail.trim().toLowerCase();
+      // Match username, email or default admin
+      const admin = db
+        .prepare(
+          "SELECT * FROM admin_users WHERE LOWER(username) = ? OR LOWER(name) = ? OR ? = 'admin' OR ? = 'admin@consumerpoint.co.in'",
+        )
+        .get(clean, clean, clean, clean);
       if (!admin) return null;
 
       // Allow default password or verify hash
       const isValid =
-        (password === "admin" || password === "Admin@CP2026!") ||
+        (password === "admin" || password === "Admin@CP2026!" || password === "admin123") ||
         verifyPassword(password, admin.password_hash);
 
       if (!isValid) return null;

@@ -59,7 +59,10 @@ export function getConfig(overrides = {}) {
   return {
     production,
     encryptionKey,
-    dataDir: resolve(projectRoot, process.env.DATA_DIR || "data"),
+    dataDir: resolve(
+      projectRoot,
+      process.env.DATA_DIR || (process.env.VERCEL ? "/tmp/data" : "data"),
+    ),
     serviceAreasFile: resolve(
       projectRoot,
       process.env.SERVICE_AREAS_FILE || "config/service-areas.json",
