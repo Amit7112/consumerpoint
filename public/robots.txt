@@ -12,4 +12,4 @@ Disallow: /technician
 Disallow: /technician/
 
 # Crawl delay & sitemap location
-Sitemap: https://consumerpoint.co.in/sitemap.xml
+Sitemap: https://www.consumerpoint.co.in/sitemap.xml

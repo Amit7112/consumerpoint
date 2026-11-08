@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { resolve, join, dirname } from "node:path";
 
-const SITE_URL = process.env.SITE_URL || "https://consumerpoint.co.in";
+const SITE_URL = process.env.SITE_URL || "https://www.consumerpoint.co.in";
 
 export const routesConfig = [
   {

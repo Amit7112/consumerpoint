@@ -9,7 +9,7 @@ test("SEO: robots.txt protects private portals and publishes sitemap", () => {
   assert.ok(robots.includes("Disallow: /admin"));
   assert.ok(robots.includes("Disallow: /technician"));
   assert.ok(robots.includes("Disallow: /api/"));
-  assert.ok(robots.includes("Sitemap: https://consumerpoint.co.in/sitemap.xml"));
+  assert.ok(robots.includes("Sitemap: https://www.consumerpoint.co.in/sitemap.xml"));
 });
 
 test("SEO: sitemap.xml exists and includes all 15 public pages", () => {
@@ -18,7 +18,7 @@ test("SEO: sitemap.xml exists and includes all 15 public pages", () => {
   assert.ok(sitemap.includes("<urlset"));
 
   for (const route of routesConfig) {
-    const loc = `<loc>https://consumerpoint.co.in${route.path === "/" ? "/" : route.path}</loc>`;
+    const loc = `<loc>https://www.consumerpoint.co.in${route.path === "/" ? "/" : route.path}</loc>`;
     assert.ok(sitemap.includes(loc), `Missing in sitemap: ${loc}`);
   }
 });
@@ -44,7 +44,7 @@ test("SEO: Prerendered pages have unique titles, descriptions, canonicals, and s
     assert.ok(html.includes(`content="${route.description.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"`));
 
     // Canonical
-    const expectedCanonical = `https://consumerpoint.co.in${route.path === "/" ? "/" : route.path}`;
+    const expectedCanonical = `https://www.consumerpoint.co.in${route.path === "/" ? "/" : route.path}`;
     assert.ok(html.includes(`<link rel="canonical" href="${expectedCanonical}" />`));
 
     // Schema

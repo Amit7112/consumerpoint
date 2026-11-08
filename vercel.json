@@ -61,6 +61,13 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/amc",
+      "destination": "/amc-maintenance",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/sitemap.xml",

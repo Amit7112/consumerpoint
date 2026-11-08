@@ -306,7 +306,7 @@ export function SEO({
     // 3. Canonical URL
     const origin =
       window.location.origin === "null" || !window.location.origin.startsWith("http")
-        ? "https://consumerpoint.co.in"
+        ? "https://www.consumerpoint.co.in"
         : window.location.origin;
     const targetPath = canonicalPath || window.location.pathname.replace(/\/$/, "") || "/";
     const canonicalHref = `${origin}${targetPath}`;
