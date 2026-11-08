@@ -18,6 +18,7 @@ import {
   Star,
   MessageCircle,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import { SEO } from "../components/UI";
 import { defaultFeedbackItems } from "./Feedback";
@@ -344,6 +345,50 @@ export default function AdminDashboardPage() {
     }
 
     setUpdatingStatusId(null);
+  };
+
+  // Delete enquiry handler
+  const handleDeleteEnquiry = async (enquiryId: string) => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete enquiry #${enquiryId}? This action cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    // 1. Immediately remove from local UI state
+    setEnquiries((prev) => prev.filter((item) => item.id !== enquiryId));
+    if (selectedEnquiry && selectedEnquiry.id === enquiryId) {
+      setSelectedEnquiry(null);
+    }
+
+    // 2. Remove from local storage
+    try {
+      const existing: Enquiry[] = JSON.parse(
+        localStorage.getItem("cp_user_enquiries") || "[]",
+      );
+      localStorage.setItem(
+        "cp_user_enquiries",
+        JSON.stringify(existing.filter((item) => item.id !== enquiryId)),
+      );
+    } catch {}
+
+    showToast(`Enquiry #${enquiryId} deleted successfully.`);
+
+    // 3. Send DELETE request to backend if authenticated
+    if (token) {
+      try {
+        await fetch(`/api/admin/enquiries/${enquiryId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      } catch {
+        // Backend offline or non-JSON: deletion already committed locally
+      }
+    }
   };
 
   // CSV Export handler (Generates RFC-4180 CSV with UTF-8 BOM)
@@ -980,13 +1025,22 @@ export default function AdminDashboardPage() {
                             </span>
                           )}
 
-                          <div className="mt-2 text-right">
+                          <div className="mt-2 flex items-center justify-end gap-3">
                             <button
                               onClick={() => setSelectedEnquiry(item)}
                               className="text-xs text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center gap-1"
                             >
                               <Eye size={14} />
                               View Full Details
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteEnquiry(item.id)}
+                              className="text-xs text-red-600 hover:text-red-800 hover:bg-red-50 px-2 py-0.5 rounded font-medium inline-flex items-center gap-1 transition-colors"
+                              title={`Delete Enquiry #${item.id}`}
+                            >
+                              <Trash2 size={13} />
+                              Delete
                             </button>
                           </div>
                         </div>
@@ -1350,6 +1404,18 @@ export default function AdminDashboardPage() {
                   <Phone size={16} />
                   Call Customer
                 </a>
+              </div>
+
+              {/* Delete button inside details modal */}
+              <div className="pt-2 border-t border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteEnquiry(selectedEnquiry.id)}
+                  className="w-full py-2 px-4 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Trash2 size={14} />
+                  Delete This Enquiry Record
+                </button>
               </div>
             </div>
           </div>

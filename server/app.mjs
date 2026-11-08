@@ -525,6 +525,15 @@ export function createApp(options = {}) {
   app.patch("/api/admin/enquiries/:id/status", requireAdmin, handleEnquiryStatusUpdate);
   app.put("/api/admin/enquiries/:id/status", requireAdmin, handleEnquiryStatusUpdate);
 
+  // Delete Customer Enquiry
+  app.delete("/api/admin/enquiries/:id", requireAdmin, (req, res) => {
+    const ok = store.remove(req.params.id);
+    if (!ok) {
+      return res.status(404).json({ message: "Enquiry not found or already deleted." });
+    }
+    return res.json({ success: true, message: "Enquiry deleted successfully." });
+  });
+
   // Customer Feedback listing
   app.get("/api/admin/feedback", requireAdmin, (_req, res) => {
     const items = store.getFeedbackListAll();

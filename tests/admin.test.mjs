@@ -155,6 +155,19 @@ test("Admin Panel & Customer Enquiry Management: 8 Core Features Verification", 
       assert.equal(ok3, false);
     });
 
+    await t.test("Feature 5b: Delete enquiry permanently from database", () => {
+      const ref = store.save(
+        "contact",
+        { name: "Delete Test", phone: "9000000000", message: "To be deleted" },
+        "token-hash-del",
+      );
+      assert.ok(store.listEnquiries().some((e) => e.id === ref));
+
+      const deleted = store.remove(ref);
+      assert.equal(deleted, 1, "Should remove 1 row from database");
+      assert.ok(!store.listEnquiries().some((e) => e.id === ref));
+    });
+
     // -------------------------------------------------------------------------
     // FEATURE 6: Search & Filter
     // -------------------------------------------------------------------------
