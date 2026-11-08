@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { SEO } from "../components/UI";
 import { defaultFeedbackItems } from "./Feedback";
+import { defaultEnquiryItems } from "../data";
 
 type AdminUser = {
   id: string;
@@ -126,10 +127,16 @@ export default function AdminDashboardPage() {
       const localEnq: Enquiry[] = JSON.parse(
         localStorage.getItem("cp_user_enquiries") || "[]",
       );
-      if (localEnq.length > 0) {
-        setEnquiries(localEnq);
-      }
-    } catch {}
+      const mergedEnq = [
+        ...localEnq,
+        ...defaultEnquiryItems.filter(
+          (b) => !localEnq.some((l) => l.id === b.id),
+        ),
+      ];
+      setEnquiries(mergedEnq);
+    } catch {
+      setEnquiries(defaultEnquiryItems);
+    }
   }, []);
 
   // Fetch data when authenticated
@@ -215,6 +222,7 @@ export default function AdminDashboardPage() {
       const headers = { Authorization: `Bearer ${token}` };
 
       // 1. Fetch Enquiries from API
+      let apiEnquiries: Enquiry[] = [];
       try {
         const enqRes = await fetch("/api/admin/enquiries", { headers });
         if (enqRes.status === 401 || enqRes.status === 403) {
@@ -225,25 +233,22 @@ export default function AdminDashboardPage() {
           const text = await enqRes.text();
           try {
             const enqData = JSON.parse(text);
-            if (Array.isArray(enqData.items)) {
-              const merged = [
-                ...localEnquiries,
-                ...enqData.items.filter(
-                  (item: Enquiry) =>
-                    !localEnquiries.some((l) => l.id === item.id),
-                ),
-              ];
-              setEnquiries(merged);
+            if (Array.isArray(enqData.items) && enqData.items.length > 0) {
+              apiEnquiries = enqData.items;
             }
           } catch {}
-        } else if (localEnquiries.length > 0) {
-          setEnquiries(localEnquiries);
         }
-      } catch {
-        if (localEnquiries.length > 0) {
-          setEnquiries(localEnquiries);
-        }
-      }
+      } catch {}
+
+      const baseEnquiries =
+        apiEnquiries.length > 0 ? apiEnquiries : defaultEnquiryItems;
+      const mergedEnquiries = [
+        ...localEnquiries,
+        ...baseEnquiries.filter(
+          (b) => !localEnquiries.some((l) => l.id === b.id),
+        ),
+      ];
+      setEnquiries(mergedEnquiries);
 
       // 2. Fetch Feedback from API
       let apiReviews: FeedbackItem[] = [];

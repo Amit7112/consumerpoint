@@ -136,6 +136,35 @@ export default function PinCodeChecker({
 
       const refId = resData?.reference || `CP-${Date.now().toString().slice(-6)}`;
       setLocFormSuccess(refId);
+
+      // Save enquiry locally
+      try {
+        const newRecord = {
+          id: refId,
+          createdAt: new Date().toISOString(),
+          kind: "service",
+          status: "Pending",
+          name: locFormName.trim(),
+          phone: locFormPhone.trim(),
+          email: "",
+          service: locFormService,
+          brandModel: "Location Service Request",
+          message: `Location service request for ${locFormLocality.trim()}, ${locFormDistrict.trim()} (PIN: ${cleanPin}). Appliance: ${locFormService}.`,
+          pincode: cleanPin,
+          city: locFormDistrict.trim(),
+          address: locFormLocality.trim(),
+        };
+        const existing = JSON.parse(
+          localStorage.getItem("cp_user_enquiries") || "[]",
+        );
+        localStorage.setItem(
+          "cp_user_enquiries",
+          JSON.stringify([
+            newRecord,
+            ...existing.filter((x: any) => x.id !== refId),
+          ]),
+        );
+      } catch {}
     } catch {
       const refId = `CP-${Date.now().toString().slice(-6)}`;
       setLocFormSuccess(refId);

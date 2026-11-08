@@ -145,7 +145,35 @@ export default function Careers() {
         return;
       }
 
-      setReference(result.reference || "CP-APPLICATION");
+      const refId = result?.reference || `CP-CAR-${Date.now().toString().slice(-6)}`;
+      setReference(refId);
+
+      // Save application locally
+      try {
+        const newRecord = {
+          id: refId,
+          createdAt: new Date().toISOString(),
+          kind: "career",
+          status: "Pending",
+          name: name.trim(),
+          phone: phone.trim(),
+          email: email.trim(),
+          service: "Technician Application",
+          brandModel: role,
+          message: `Role: ${role}. Experience: ${experience}. Skills: ${skills.trim()}.\n${introduction.trim()}`,
+          city: location.trim(),
+        };
+        const existing = JSON.parse(
+          localStorage.getItem("cp_user_enquiries") || "[]",
+        );
+        localStorage.setItem(
+          "cp_user_enquiries",
+          JSON.stringify([
+            newRecord,
+            ...existing.filter((x: any) => x.id !== refId),
+          ]),
+        );
+      } catch {}
     } catch {
       setErrorMessage("Network error. Please check your connection and try again.");
       fetchToken();
