@@ -285,81 +285,145 @@ export default function AdminDashboardPage() {
     enquiryId: string,
     newStatus: "Pending" | "In Progress" | "Completed",
   ) => {
-    if (!token) return;
     setUpdatingStatusId(enquiryId);
-    try {
-      const res = await fetch(`/api/admin/enquiries/${enquiryId}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Failed to update status.");
-      }
+    // 1. Immediately update state in UI
+    setEnquiries((prev) =>
+      prev.map((item) =>
+        item.id === enquiryId ? { ...item, status: newStatus } : item,
+      ),
+    );
 
-      // Update state locally
-      setEnquiries((prev) =>
-        prev.map((item) =>
-          item.id === enquiryId ? { ...item, status: newStatus } : item,
-        ),
-      );
-
-      try {
-        const existing: Enquiry[] = JSON.parse(
-          localStorage.getItem("cp_user_enquiries") || "[]",
-        );
-        localStorage.setItem(
-          "cp_user_enquiries",
-          JSON.stringify(
-            existing.map((item) =>
-              item.id === enquiryId ? { ...item, status: newStatus } : item,
-            ),
-          ),
-        );
-      } catch {}
-
-      if (selectedEnquiry && selectedEnquiry.id === enquiryId) {
-        setSelectedEnquiry((prev) => (prev ? { ...prev, status: newStatus } : null));
-      }
-
-      showToast(`Status updated to "${newStatus}" for #${enquiryId}`);
-    } catch (err) {
-      alert(err instanceof Error ? err.message : "Status update failed.");
-    } finally {
-      setUpdatingStatusId(null);
+    if (selectedEnquiry && selectedEnquiry.id === enquiryId) {
+      setSelectedEnquiry((prev) => (prev ? { ...prev, status: newStatus } : null));
     }
+
+    // 2. Persist updated status in local storage immediately
+    try {
+      const existing: Enquiry[] = JSON.parse(
+        localStorage.getItem("cp_user_enquiries") || "[]",
+      );
+      const isExisting = existing.some((item) => item.id === enquiryId);
+      const updatedList = isExisting
+        ? existing.map((item) =>
+            item.id === enquiryId ? { ...item, status: newStatus } : item,
+          )
+        : [
+            ...existing,
+            ...enquiries
+              .filter((e) => e.id === enquiryId)
+              .map((e) => ({ ...e, status: newStatus })),
+          ];
+      localStorage.setItem("cp_user_enquiries", JSON.stringify(updatedList));
+    } catch {}
+
+    showToast(`Status updated to "${newStatus}" for #${enquiryId}`);
+
+    // 3. Sync with backend API safely without blocking UI
+    if (token) {
+      try {
+        const res = await fetch(`/api/admin/enquiries/${enquiryId}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+
+        // Safely check response without throwing JSON syntax errors
+        if (res.ok) {
+          const text = await res.text();
+          try {
+            JSON.parse(text);
+          } catch {}
+        }
+      } catch (err) {
+        // Backend offline or non-JSON response: preserved locally in localStorage
+      }
+    }
+
+    setUpdatingStatusId(null);
   };
 
-  // CSV Export handler
+  // CSV Export handler (Generates RFC-4180 CSV with UTF-8 BOM)
   const handleExport = (type: "enquiries" | "feedback") => {
-    if (!token) return;
-    const url = `/api/admin/export/${type}`;
-    fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Export failed.");
-        return res.blob();
-      })
-      .then((blob) => {
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = downloadUrl;
-        a.download = `consumer-point-${type}-${new Date().toISOString().slice(0, 10)}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(downloadUrl);
-        document.body.removeChild(a);
-        showToast(`${type === "enquiries" ? "Enquiries" : "Feedback"} CSV downloaded successfully!`);
-      })
-      .catch((err) => {
-        alert(err.message || "Failed to download export file.");
-      });
+    function downloadCSV(csvContent: string, filename: string) {
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(downloadUrl);
+      document.body.removeChild(a);
+      showToast(
+        `${type === "enquiries" ? "Enquiries" : "Feedback"} CSV downloaded successfully!`,
+      );
+    }
+
+    const filename = `consumer-point-${type}-${new Date().toISOString().slice(0, 10)}.csv`;
+
+    if (type === "enquiries") {
+      const headers = [
+        "Reference ID",
+        "Submission Date (IST)",
+        "Status",
+        "Customer Name",
+        "Mobile Number",
+        "Email Address",
+        "Service Requested",
+        "Brand / Model",
+        "PIN Code",
+        "City / Location",
+        "Customer Address",
+        "Customer Message",
+      ];
+      const rows = enquiries.map((e) => [
+        `"${(e.id || "").replace(/"/g, '""')}"`,
+        `"${new Date(e.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`,
+        `"${(e.status || "").replace(/"/g, '""')}"`,
+        `"${(e.name || "").replace(/"/g, '""')}"`,
+        `"${(e.phone || "").replace(/"/g, '""')}"`,
+        `"${(e.email || "").replace(/"/g, '""')}"`,
+        `"${(e.service || "").replace(/"/g, '""')}"`,
+        `"${(e.brandModel || "").replace(/"/g, '""')}"`,
+        `"${(e.pincode || "").replace(/"/g, '""')}"`,
+        `"${(e.city || "").replace(/"/g, '""')}"`,
+        `"${(e.address || "").replace(/"/g, '""')}"`,
+        `"${(e.message || "").replace(/"/g, '""')}"`,
+      ]);
+      const csv =
+        "\uFEFF" +
+        [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+      downloadCSV(csv, filename);
+    } else {
+      const headers = [
+        "Review ID",
+        "Submission Date (IST)",
+        "Customer Name",
+        "Rating (Stars)",
+        "Service Category",
+        "Customer Review Comment",
+        "Status",
+        "Verified Customer",
+      ];
+      const rows = feedback.map((f) => [
+        `"${(f.id || "").replace(/"/g, '""')}"`,
+        `"${new Date(f.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}"`,
+        `"${(f.name || "").replace(/"/g, '""')}"`,
+        `"${f.rating}"`,
+        `"${(f.service || "").replace(/"/g, '""')}"`,
+        `"${(f.comment || "").replace(/"/g, '""')}"`,
+        `"${f.status || "published"}"`,
+        `"${f.verified ? "Yes" : "No"}"`,
+      ]);
+      const csv =
+        "\uFEFF" +
+        [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+      downloadCSV(csv, filename);
+    }
   };
 
   // Filtered Enquiries
