@@ -61,16 +61,16 @@ export default function Locations() {
   return (
     <>
       <SEO
-        title="Check Service Availability & PIN Codes"
-        description="Check appliance service availability by PIN code across Jaunpur, Prayagraj, Kaushambi and surrounding areas. Instant PIN verification and WhatsApp enquiry."
+        title="Appliance Service Locations & PIN Coverage | Prayagraj, Bhadohi, Kaushambi, Jaunpur"
+        description="Check verified doorstep appliance repair and installation coverage across 430+ locations in Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Instant PIN code verification."
       />
 
       <PageHero
         eyebrow="Service Locations & Network"
         title="Check service availability in your area."
       >
-        Serving 430+ post office locations and 45 PIN codes across Jaunpur,
-        Prayagraj, and Kaushambi. Enter your 6-digit PIN code below for instant confirmation.
+        Serving 430+ post office locations and PIN codes across Prayagraj,
+        Bhadohi, Kaushambi, and Jaunpur. Enter your 6-digit PIN code below for instant confirmation.
       </PageHero>
 
       {/* Main PIN Code Availability Checker & Directory Section */}

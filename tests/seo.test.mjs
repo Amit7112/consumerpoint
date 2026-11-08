@@ -50,7 +50,30 @@ test("SEO: Prerendered pages have unique titles, descriptions, canonicals, and s
     // Schema
     assert.ok(html.includes('"HomeAndConstructionBusiness"'));
     assert.ok(html.includes('"BreadcrumbList"'));
+    assert.ok(html.includes('"WebSite"'));
+    assert.ok(html.includes('"Bhadohi"'));
+    assert.ok(html.includes('"Prayagraj"'));
+    assert.ok(html.includes('"Kaushambi"'));
+    assert.ok(html.includes('"Jaunpur"'));
+
+    // Verify crawlable semantic fallback markup exists inside #root
+    assert.ok(html.includes('id="ssr-seo-content"'), `Missing crawlable SSR content in: ${filePath}`);
+    assert.ok(html.includes("<h1"), `Missing semantic h1 in: ${filePath}`);
+
+    // If not homepage, also verify clean .html file exists for Vercel cleanUrls
+    if (route.path !== "/") {
+      const cleanHtmlPath = resolve(`dist${route.path}.html`);
+      assert.ok(existsSync(cleanHtmlPath), `Clean URL HTML file missing for Vercel: ${cleanHtmlPath}`);
+    }
   }
+});
+
+test("SEO: Target keywords verified on AMC and Services routes", () => {
+  const amcHtml = readFileSync(resolve("dist/amc-maintenance/index.html"), "utf8");
+  assert.ok(amcHtml.includes("Best Home Appliance Maintenance Services"));
+
+  const servicesHtml = readFileSync(resolve("dist/services/index.html"), "utf8");
+  assert.ok(servicesHtml.includes("Doorstep Appliance Repair"));
 });
 
 test("SEO: 404 page exists and contains noindex directive", () => {

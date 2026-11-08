@@ -7,21 +7,19 @@ export default function Services() {
   return (
     <>
       <SEO
-        title="Appliance Repair, Installation & Service"
-        description="Request AC installation and maintenance, refrigerator repair, washing machine service, television setup, geyser installation, and eligible appliance support."
+        title="Doorstep Appliance Repair & Installation Services"
+        description="Professional doorstep repair and installation for air conditioners, refrigerators, washing machines, televisions, geysers, and water purifiers across Prayagraj, Bhadohi, Kaushambi & Jaunpur."
       />
       <PageHero
         eyebrow="Services"
         title={
           <>
-            A little expert help.
-            <br />A better everyday.
+            Doorstep Appliance Repair
+            <br />&amp; Installation Services.
           </>
         }
       >
-        From installation questions to an appliance that needs attention, share
-        what you need. We'll start with the details and confirm the right next
-        step.
+        Expert doorstep repair and professional installation for your essential home appliances across Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Share what you need and our verified technicians will confirm the right next step.
       </PageHero>
       <section className="section">
         <div className="container">

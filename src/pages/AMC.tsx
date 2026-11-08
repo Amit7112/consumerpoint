@@ -7,21 +7,19 @@ export default function AMC() {
   return (
     <>
       <SEO
-        title="AMC & Preventive Appliance Maintenance"
-        description="Explore Essential, Comprehensive, and Business appliance maintenance proposal options. Request a tailored annual maintenance contract from Consumer Point."
+        title="Best Home Appliance Maintenance Services & AMC"
+        description="Best home appliance maintenance services and annual maintenance contracts (AMC). Scheduled seasonal check-ups, genuine spares, and verified technicians across Prayagraj, Bhadohi, Kaushambi & Jaunpur."
       />
       <PageHero
         eyebrow="AMC & Maintenance"
         title={
           <>
-            A little care today.
-            <br />A smoother tomorrow.
+            Best Home Appliance
+            <br />Maintenance Services.
           </>
         }
       >
-        Explore preventive maintenance options for your home or business. Every
-        proposal is shaped around your appliances, location, and agreed
-        requirements.
+        Explore the best home appliance maintenance contracts and preventive care options for your home or business across Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Every proposal is shaped around your appliances, location, and agreed requirements.
       </PageHero>
 
       <section className="amc-highlights-section">

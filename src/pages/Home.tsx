@@ -52,8 +52,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Home Appliance Service, Repair & Installation"
-        description="Expert home appliance repair, AC installation, preventive maintenance, and Comprehensive AMC services across Uttar Pradesh."
+        title="Consumer Point | Home Appliance Service, Repair & Installation"
+        description="Expert home appliance repair, installation and AMC services across Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Verified technicians for AC, washing machine, refrigerator & TV repair."
       />
       <section className="hero">
         <motion.img
@@ -83,14 +83,13 @@ export default function Home() {
               Consumer Point<span>.</span>
             </p>
             <h1>
-              A better experience
+              Home Appliance Service,
               <br />
-              for <span>every home.</span>
+              Repair &amp; <span>Installation.</span>
             </h1>
             <p className="hero-description">
-              Your trusted partner for home appliance repairs,
-              <br className="desktop-break" /> professional installation, and
-              dependable preventive maintenance.
+              Your trusted partner for home appliance repairs, professional installation,
+              <br className="desktop-break" /> and dependable maintenance across Prayagraj, Bhadohi, Kaushambi &amp; Jaunpur.
             </p>
             <div className="button-group">
               <ButtonLink to="/services">Explore Our Services</ButtonLink>

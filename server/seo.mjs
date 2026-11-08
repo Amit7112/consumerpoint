@@ -1,7 +1,7 @@
 export const pageMetadata = {
   "/": [
     "Home Appliance Sales, Service & Installation",
-    "A better experience for every home. Explore Consumer Point home appliances, repair enquiries, installation, preventive maintenance, and business partnerships.",
+    "Expert home appliance repair, installation and AMC services across Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Verified technicians for AC, washing machine, refrigerator & TV repair.",
   ],
   "/about": [
     "About Us",
@@ -12,12 +12,12 @@ export const pageMetadata = {
     "Explore air conditioners, refrigerators, washing machines, televisions, kitchen appliances, water purifiers, and electrical appliance enquiries.",
   ],
   "/services": [
-    "Appliance Repair, Installation & Service",
-    "Request AC installation, refrigerator repair, washing machine service, television setup, geyser installation, and eligible appliance support.",
+    "Doorstep Appliance Repair & Installation Services",
+    "Professional doorstep repair and installation for air conditioners, refrigerators, washing machines, and televisions across Prayagraj, Bhadohi, Kaushambi & Jaunpur.",
   ],
   "/amc-maintenance": [
-    "AMC & Preventive Appliance Maintenance",
-    "Request a tailored Essential, Comprehensive, or Business annual maintenance proposal for your appliances.",
+    "Best Home Appliance Maintenance Services & AMC",
+    "Best home appliance maintenance services and annual maintenance contracts (AMC). Scheduled seasonal check-ups, genuine spares, and verified technicians across Prayagraj, Bhadohi, Kaushambi & Jaunpur.",
   ],
   "/careers": [
     "Careers & Recruitment for Electricians & Technicians",
@@ -28,8 +28,8 @@ export const pageMetadata = {
     "Grow your service network with Consumer Point. We partner with appliance brands, manufacturers, distributors, dealers, and service organizations.",
   ],
   "/service-locations": [
-    "Check Appliance Service Locations",
-    "Check appliance service availability by city or Indian PIN code. Location, appliance eligibility, and appointments require confirmation.",
+    "Appliance Service Locations & PIN Coverage",
+    "Check verified doorstep appliance repair and installation coverage across 430+ locations in Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Instant PIN code verification.",
   ],
   "/contact": [
     "Contact & Enquiries",

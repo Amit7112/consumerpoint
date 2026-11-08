@@ -9,7 +9,7 @@ export const routesConfig = [
     priority: "1.0",
     changefreq: "weekly",
     title: "Consumer Point | Home Appliance Service, Repair & Installation",
-    description: "Expert home appliance repair, installation and AMC services across Jaunpur, Prayagraj, Kaushambi and surrounding areas. AC, washing machine, refrigerator, TV & RO service.",
+    description: "Expert home appliance repair, installation and AMC services across Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Verified technicians for AC, washing machine, refrigerator & TV repair.",
     type: "website",
     schemaType: "HomeAndConstructionBusiness",
   },
@@ -17,8 +17,8 @@ export const routesConfig = [
     path: "/services",
     priority: "0.9",
     changefreq: "weekly",
-    title: "Appliance Repair & Installation Services | Consumer Point",
-    description: "Professional doorstep repair and installation for air conditioners, refrigerators, washing machines, televisions, geysers, and water purifiers. Verified technicians.",
+    title: "Doorstep Appliance Repair & Installation Services | Consumer Point",
+    description: "Professional doorstep repair and installation for air conditioners, refrigerators, washing machines, televisions, geysers, and water purifiers across Prayagraj, Bhadohi, Kaushambi & Jaunpur.",
     type: "service",
     schemaType: "Service",
   },
@@ -26,8 +26,8 @@ export const routesConfig = [
     path: "/amc-maintenance",
     priority: "0.9",
     changefreq: "weekly",
-    title: "Appliance AMC & Preventive Maintenance Contracts | Consumer Point",
-    description: "Comprehensive and Essential Annual Maintenance Contracts (AMC) for home appliances. Scheduled seasonal check-ups, genuine spares, and priority breakdown support.",
+    title: "Best Home Appliance Maintenance Services & AMC | Consumer Point",
+    description: "Best home appliance maintenance services and annual maintenance contracts (AMC). Scheduled seasonal check-ups, genuine spares, and verified technicians across Prayagraj, Bhadohi, Kaushambi & Jaunpur.",
     type: "service",
     schemaType: "Service",
   },
@@ -44,8 +44,8 @@ export const routesConfig = [
     path: "/service-locations",
     priority: "0.9",
     changefreq: "weekly",
-    title: "Check Service Coverage by PIN Code | 430+ Locations | Consumer Point",
-    description: "Check verified doorstep service coverage across 430+ locations in Jaunpur, Prayagraj, Kaushambi, Varanasi, and East UP. Instant PIN code verification.",
+    title: "Appliance Service Locations & PIN Coverage | Prayagraj, Bhadohi, Kaushambi, Jaunpur",
+    description: "Check verified doorstep appliance repair and installation coverage across 430+ locations in Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Instant PIN code verification.",
     type: "website",
     schemaType: "ItemPage",
   },
@@ -203,7 +203,7 @@ export function generateJsonLd(route) {
     logo: `${SITE_URL}/images/logo-consumer-point.png`,
     image: `${SITE_URL}/images/og-image.jpg`,
     description:
-      "Professional home appliance repair, AC installation, preventive maintenance and Comprehensive AMC services across Uttar Pradesh.",
+      "Professional home appliance repair, AC installation, preventive maintenance and Comprehensive AMC services across Prayagraj, Bhadohi, Kaushambi, and Jaunpur.",
     telephone: "+91-9810863934",
     email: "support@consumerpoint.co.in",
     priceRange: "₹₹",
@@ -211,15 +211,19 @@ export function generateJsonLd(route) {
     areaServed: [
       {
         "@type": "AdministrativeArea",
-        name: "Jaunpur",
-      },
-      {
-        "@type": "AdministrativeArea",
         name: "Prayagraj",
       },
       {
         "@type": "AdministrativeArea",
+        name: "Bhadohi",
+      },
+      {
+        "@type": "AdministrativeArea",
         name: "Kaushambi",
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: "Jaunpur",
       },
       {
         "@type": "AdministrativeArea",
@@ -266,6 +270,19 @@ export function generateJsonLd(route) {
     },
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    name: "Consumer Point",
+    alternateName: [
+      "ConsumerPoint",
+      "Consumer Point Appliances",
+      "Consumer Point Home Appliance Service & Repair",
+    ],
+    url: SITE_URL,
+  };
+
   const breadcrumbs = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -289,13 +306,63 @@ export function generateJsonLd(route) {
     ],
   };
 
-  const schemas = [baseOrg, breadcrumbs];
+  const schemas = [baseOrg, websiteSchema, breadcrumbs];
+
+  if (route.path === "/services") {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Home Appliance Repair & Installation Services",
+      serviceType: "Doorstep Appliance Repair",
+      provider: {
+        "@type": "HomeAndConstructionBusiness",
+        name: "Consumer Point",
+        url: SITE_URL,
+      },
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Prayagraj" },
+        { "@type": "AdministrativeArea", name: "Bhadohi" },
+        { "@type": "AdministrativeArea", name: "Kaushambi" },
+        { "@type": "AdministrativeArea", name: "Jaunpur" },
+      ],
+      description: route.description,
+    });
+  }
+
+  if (route.path === "/amc-maintenance") {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Best Home Appliance Maintenance Services & AMC Contracts",
+      serviceType: "Annual Maintenance Contracts (AMC)",
+      provider: {
+        "@type": "HomeAndConstructionBusiness",
+        name: "Consumer Point",
+        url: SITE_URL,
+      },
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Prayagraj" },
+        { "@type": "AdministrativeArea", name: "Bhadohi" },
+        { "@type": "AdministrativeArea", name: "Kaushambi" },
+        { "@type": "AdministrativeArea", name: "Jaunpur" },
+      ],
+      description: route.description,
+    });
+  }
 
   if (route.path === "/faq") {
     schemas.push({
       "@context": "https://schema.org",
       "@type": "FAQPage",
       mainEntity: [
+        {
+          "@type": "Question",
+          name: "Which appliances does Consumer Point service and repair?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Consumer Point provides doorstep repair, installation, and maintenance for air conditioners, refrigerators, washing machines, televisions, geysers, and water purifiers across Prayagraj, Bhadohi, Kaushambi, and Jaunpur.",
+          },
+        },
         {
           "@type": "Question",
           name: "How quickly can a technician visit my location?",
@@ -417,17 +484,49 @@ export function prerenderRoutes() {
       );
     }
 
+    // Inject crawlable semantic fallback markup inside #root for search engine indexing
+    const crawlableFallback = `
+      <div id="ssr-seo-content" style="display:contents">
+        <header>
+          <h2>Consumer Point — Home Appliance Sales, Service, Repair & Installation</h2>
+          <p>Serving Prayagraj, Bhadohi, Kaushambi, and Jaunpur. Support Helpline: +91-9810863934</p>
+        </header>
+        <main>
+          <h1>${escapeHtml(route.title.split("|")[0].trim())}</h1>
+          <p>${escapeHtml(route.description)}</p>
+          <nav aria-label="Main Navigation">
+            <a href="/">Home</a> |
+            <a href="/services">Doorstep Appliance Repair Services</a> |
+            <a href="/amc-maintenance">Best Home Appliance Maintenance Services (AMC)</a> |
+            <a href="/service-locations">Service Locations & PIN Coverage</a> |
+            <a href="/feedback">Customer Reviews</a> |
+            <a href="/contact">Contact Support</a>
+          </nav>
+        </main>
+      </div>`;
+
+    pageHtml = pageHtml.replace(
+      '<div id="root"></div>',
+      `<div id="root">${crawlableFallback}</div>`,
+    );
+
     // Determine output file path
     let outPath;
     if (route.path === "/") {
       outPath = join(distDir, "index.html");
+      writeFileSync(outPath, pageHtml, "utf8");
     } else {
-      const folder = join(distDir, route.path.replace(/^\//, ""));
+      const cleanSlug = route.path.replace(/^\//, "");
+      const folder = join(distDir, cleanSlug);
       if (!existsSync(folder)) mkdirSync(folder, { recursive: true });
       outPath = join(folder, "index.html");
+      writeFileSync(outPath, pageHtml, "utf8");
+
+      // ALSO write clean .html file in dist root for Vercel cleanUrls resolution
+      const cleanHtmlPath = join(distDir, `${cleanSlug}.html`);
+      writeFileSync(cleanHtmlPath, pageHtml, "utf8");
     }
 
-    writeFileSync(outPath, pageHtml, "utf8");
     console.log(`Prerendered: ${route.path} -> ${outPath}`);
   }
 
