@@ -338,6 +338,45 @@ export default function EnquiryForm({
       }
 
       setReference(referenceId);
+
+      // Persist submitted enquiry locally
+      try {
+        const val: any = validation.data || values;
+        const newRecord = {
+          id: referenceId,
+          createdAt: new Date().toISOString(),
+          kind,
+          status: "Pending",
+          name: val.name || "",
+          phone: val.phone || "",
+          email: val.email || "",
+          service:
+            val.category ||
+            val.service ||
+            (kind === "contact"
+              ? "General Contact"
+              : kind === "amc"
+                ? "AMC Maintenance"
+                : kind === "partnership"
+                  ? "Brand Partnership"
+                  : "Service / Repair"),
+          brandModel: val.brandModel || "",
+          message: val.message || "",
+          pincode: val.pin || "",
+          city: val.city || "",
+          address: val.address || "",
+        };
+        const existing = JSON.parse(
+          localStorage.getItem("cp_user_enquiries") || "[]",
+        );
+        localStorage.setItem(
+          "cp_user_enquiries",
+          JSON.stringify([
+            newRecord,
+            ...existing.filter((x: any) => x.id !== referenceId),
+          ]),
+        );
+      } catch {}
       const formatted = formatEnquiryForWhatsApp(
         kind,
         validation.data || values,

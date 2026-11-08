@@ -38,7 +38,7 @@ const ratingLabels: Record<number, { text: string; color: string }> = {
   1: { text: "Poor - Unsatisfactory", color: "#ef4444" },
 };
 
-const defaultFeedbackItems: FeedbackItem[] = [
+export const defaultFeedbackItems: FeedbackItem[] = [
   {
     id: "FB-SEEDA1",
     name: "Vikram Sharma",

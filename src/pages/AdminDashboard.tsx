@@ -20,6 +20,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SEO } from "../components/UI";
+import { defaultFeedbackItems } from "./Feedback";
 
 type AdminUser = {
   id: string;
@@ -91,7 +92,7 @@ export default function AdminDashboardPage() {
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
   const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null);
 
-  // Load existing session on mount
+  // Load existing session and initial offline data on mount
   useEffect(() => {
     const savedToken = localStorage.getItem("cp_admin_token");
     const savedUser = localStorage.getItem("cp_admin_user");
@@ -104,6 +105,31 @@ export default function AdminDashboardPage() {
         localStorage.removeItem("cp_admin_user");
       }
     }
+
+    // Load initial feedback and enquiries from storage
+    try {
+      const localReviews: FeedbackItem[] = JSON.parse(
+        localStorage.getItem("cp_user_feedback") || "[]",
+      );
+      const mergedFb = [
+        ...localReviews,
+        ...defaultFeedbackItems.filter(
+          (b) => !localReviews.some((l) => l.id === b.id),
+        ),
+      ];
+      setFeedback(mergedFb);
+    } catch {
+      setFeedback(defaultFeedbackItems);
+    }
+
+    try {
+      const localEnq: Enquiry[] = JSON.parse(
+        localStorage.getItem("cp_user_enquiries") || "[]",
+      );
+      if (localEnq.length > 0) {
+        setEnquiries(localEnq);
+      }
+    } catch {}
   }, []);
 
   // Fetch data when authenticated
@@ -169,26 +195,79 @@ export default function AdminDashboardPage() {
   const fetchAllData = async () => {
     if (!token) return;
     setDataLoading(true);
+
+    // 1. Load Local Enquiries & Feedback from storage
+    let localEnquiries: Enquiry[] = [];
+    try {
+      localEnquiries = JSON.parse(
+        localStorage.getItem("cp_user_enquiries") || "[]",
+      );
+    } catch {}
+
+    let localReviews: FeedbackItem[] = [];
+    try {
+      localReviews = JSON.parse(
+        localStorage.getItem("cp_user_feedback") || "[]",
+      );
+    } catch {}
+
     try {
       const headers = { Authorization: `Bearer ${token}` };
 
-      // 1. Fetch Enquiries
-      const enqRes = await fetch("/api/admin/enquiries", { headers });
-      if (enqRes.status === 401 || enqRes.status === 403) {
-        handleLogout();
-        return;
-      }
-      if (enqRes.ok) {
-        const enqData = await enqRes.json();
-        setEnquiries(enqData.items || []);
+      // 1. Fetch Enquiries from API
+      try {
+        const enqRes = await fetch("/api/admin/enquiries", { headers });
+        if (enqRes.status === 401 || enqRes.status === 403) {
+          handleLogout();
+          return;
+        }
+        if (enqRes.ok) {
+          const text = await enqRes.text();
+          try {
+            const enqData = JSON.parse(text);
+            if (Array.isArray(enqData.items)) {
+              const merged = [
+                ...localEnquiries,
+                ...enqData.items.filter(
+                  (item: Enquiry) =>
+                    !localEnquiries.some((l) => l.id === item.id),
+                ),
+              ];
+              setEnquiries(merged);
+            }
+          } catch {}
+        } else if (localEnquiries.length > 0) {
+          setEnquiries(localEnquiries);
+        }
+      } catch {
+        if (localEnquiries.length > 0) {
+          setEnquiries(localEnquiries);
+        }
       }
 
-      // 2. Fetch Feedback
-      const fbRes = await fetch("/api/admin/feedback", { headers });
-      if (fbRes.ok) {
-        const fbData = await fbRes.json();
-        setFeedback(fbData.items || []);
-      }
+      // 2. Fetch Feedback from API
+      let apiReviews: FeedbackItem[] = [];
+      try {
+        const fbRes = await fetch("/api/admin/feedback", { headers });
+        if (fbRes.ok) {
+          const text = await fbRes.text();
+          try {
+            const fbData = JSON.parse(text);
+            if (Array.isArray(fbData.items) && fbData.items.length > 0) {
+              apiReviews = fbData.items;
+            }
+          } catch {}
+        }
+      } catch {}
+
+      const baseReviews = apiReviews.length > 0 ? apiReviews : defaultFeedbackItems;
+      const mergedFeedback = [
+        ...localReviews,
+        ...baseReviews.filter(
+          (b) => !localReviews.some((l) => l.id === b.id),
+        ),
+      ];
+      setFeedback(mergedFeedback);
     } catch (err) {
       console.error("Failed to load admin data:", err);
     } finally {
@@ -224,6 +303,20 @@ export default function AdminDashboardPage() {
           item.id === enquiryId ? { ...item, status: newStatus } : item,
         ),
       );
+
+      try {
+        const existing: Enquiry[] = JSON.parse(
+          localStorage.getItem("cp_user_enquiries") || "[]",
+        );
+        localStorage.setItem(
+          "cp_user_enquiries",
+          JSON.stringify(
+            existing.map((item) =>
+              item.id === enquiryId ? { ...item, status: newStatus } : item,
+            ),
+          ),
+        );
+      } catch {}
 
       if (selectedEnquiry && selectedEnquiry.id === enquiryId) {
         setSelectedEnquiry((prev) => (prev ? { ...prev, status: newStatus } : null));
