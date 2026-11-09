@@ -4,6 +4,7 @@ import {
   Info,
   ShieldCheck,
   ArrowRight,
+  Check,
   Wind,
   Refrigerator,
   WashingMachine,
@@ -110,16 +111,30 @@ export default function Products() {
                     type="button"
                     className={`cat-card-btn ${isSelected ? "selected" : ""}`}
                     onClick={() => handleSelectCategory(cat.id)}
+                    aria-pressed={isSelected}
                   >
-                    <div className="cat-icon-wrap">
-                      <IconComponent size={26} strokeWidth={1.75} />
+                    <div className="cat-card-top">
+                      <div className="cat-icon-wrap">
+                        <IconComponent size={22} strokeWidth={1.8} />
+                      </div>
+                      <span className={`cat-card-badge ${isSelected ? "selected" : ""}`}>
+                        {isSelected ? "Active Guide" : "Guide"}
+                      </span>
                     </div>
-                    <h3>{cat.name}</h3>
-                    <p>{cat.desc}</p>
-                    <span className="cat-btn-cta">
-                      {isSelected ? "Currently Viewing Guide" : "View Buying Guide"}
-                      <ArrowRight size={14} />
-                    </span>
+                    <div className="cat-card-body">
+                      <h3>{cat.name}</h3>
+                      <p>{cat.desc}</p>
+                    </div>
+                    <div className="cat-card-footer">
+                      <span className="cat-footer-text">
+                        {isSelected ? "Currently Viewing" : "View Buying Guide"}
+                      </span>
+                      {isSelected ? (
+                        <Check size={14} className="cat-footer-arrow" />
+                      ) : (
+                        <ArrowRight size={14} className="cat-footer-arrow" />
+                      )}
+                    </div>
                   </button>
                 );
               })}
