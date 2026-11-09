@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom";
 import {
   Heart,
   ShieldCheck,
   Sparkles,
   Lightbulb,
   Handshake,
+  ArrowUpRight,
 } from "lucide-react";
+import { whyChooseServices } from "../data";
 import {
   ArrowLink,
   FinalCTA,
@@ -157,6 +160,52 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      {/* Dedicated Section: Why Choose Consumer Point? (7 Core Services) */}
+      <section className="section why-choose-complete" id="why-consumer-point">
+        <div className="container">
+          <Reveal>
+            <div className="why-choose-header text-center">
+              <p className="eyebrow">
+                <span />
+                OUR COMMITMENT TO YOU
+              </p>
+              <h2>Why Choose Consumer Point?</h2>
+              <p className="section-description">
+                Your Trusted Pre-Purchase &amp; After-Sales Appliance Guide Partner.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="why-choose-grid-3">
+            {whyChooseServices.map((service, index) => {
+              const IconComp = service.icon;
+              return (
+                <Reveal
+                  className="why-card-complete"
+                  key={service.id}
+                  delay={index * 0.05}
+                >
+                  <div className="why-card-top">
+                    <div className="why-card-icon-wrap">
+                      <IconComp size={22} strokeWidth={1.8} />
+                    </div>
+                    <span className="why-card-step">0{service.stepNumber}</span>
+                  </div>
+                  <h3>{service.title}</h3>
+                  <p className="why-card-short">{service.shortDesc}</p>
+                  <p className="why-card-full">{service.fullDesc}</p>
+                  <Link to={service.linkTo} className="why-card-link">
+                    <span>{service.linkText}</span>
+                    <ArrowUpRight size={15} />
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <FinalCTA />
     </>
   );

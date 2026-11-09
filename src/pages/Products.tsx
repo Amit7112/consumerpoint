@@ -1,105 +1,185 @@
-import { useState } from "react";
-import { Info, Search, SearchX } from "lucide-react";
-import { categories } from "../data";
-import { ProductGrid } from "../components/Products";
-import { FinalCTA, PageHero, SEO } from "../components/UI";
+import { useState, useEffect } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import {
+  Info,
+  ShieldCheck,
+  ArrowRight,
+  Wind,
+  Refrigerator,
+  WashingMachine,
+  Tv,
+  Droplets,
+  Microwave,
+  Heater,
+  UtensilsCrossed,
+  Lightbulb,
+  Zap,
+  Car,
+  Home,
+} from "lucide-react";
+import { applianceGuides } from "../data/applianceGuides";
+import CategoryGuideView from "../components/CategoryGuideView";
+import BuyingAssistant from "../components/BuyingAssistant";
+import { FinalCTA, PageHero, Reveal, SEO } from "../components/UI";
+
+const availableCategories = [
+  { id: "refrigerators", name: "Refrigerators", icon: Refrigerator, desc: "Single, Double Door, Side-by-Side & Inverters" },
+  { id: "air-conditioners", name: "Air Conditioners", icon: Wind, desc: "Split, Window, 100% Copper & Dual Inverters" },
+  { id: "washing-machines", name: "Washing Machines", icon: WashingMachine, desc: "Front Load, Top Load, Inverters & In-built Heaters" },
+  { id: "televisions", name: "Televisions", icon: Tv, desc: "4K LED, QLED, OLED & Viewing Distances" },
+  { id: "water-purifiers", name: "Water Purifiers", icon: Droplets, desc: "RO vs UV vs UF & TDS Water Testing" },
+  { id: "microwave-ovens", name: "Microwave Ovens", icon: Microwave, desc: "Solo, Grill, Convection & Cavity Capacities" },
+  { id: "geysers", name: "Geysers & Heaters", icon: Heater, desc: "Instant, Storage, Glass-Lined & 8-Bar Tanks" },
+  { id: "dishwashers", name: "Dishwashers", icon: UtensilsCrossed, desc: "13-14 Place Settings, 70°C Intensive & Water Softeners" },
+  { id: "led-lighting", name: "LED Lighting", icon: Lightbulb, desc: "Lumens, CCT Warm/Cool White, High CRI & 4kV Surge Drivers" },
+  { id: "inverters-power-backup", name: "Inverters & Power Backup", icon: Zap, desc: "Pure Sine Wave, VA to Watt Sizing & Tubular/Lithium Batteries" },
+  { id: "electric-vehicles", name: "Electric Vehicles (EVs)", icon: Car, desc: "E-Scooters, City EVs, Real-world Range & 16A Home Charging" },
+  { id: "home-electrical-wiring", name: "Home Electrical Wiring", icon: Home, desc: "Concealed Conduits, Wire Gauges, DB RCCB Protection & Point Planning" },
+];
 
 export default function Products() {
-  const [search, setSearch] = useState("");
-  const [group, setGroup] = useState("All categories");
-  const filtered = categories.filter(
-    (item) =>
-      (group === "All categories" || item.group === group) &&
-      `${item.name} ${item.description}`
-        .toLowerCase()
-        .includes(search.toLowerCase().trim()),
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+
+  const [activeCategory, setActiveCategory] = useState<string>(
+    categoryParam && applianceGuides[categoryParam] ? categoryParam : "refrigerators"
   );
+
+  useEffect(() => {
+    if (categoryParam && applianceGuides[categoryParam]) {
+      setActiveCategory(categoryParam);
+    }
+  }, [categoryParam]);
+
+  function handleSelectCategory(catId: string) {
+    setActiveCategory(catId);
+    setSearchParams({ category: catId });
+    const el = document.getElementById("guide-details");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
+  const currentGuide = applianceGuides[activeCategory] || applianceGuides["refrigerators"];
+
   return (
     <>
       <SEO
-        title="Appliances We Service, Repair & Maintain"
-        description="Comprehensive doorstep service, repair, and installation for all major home appliance categories: air conditioners, refrigerators, washing machines, and televisions."
+        title="Appliance Buying Guides & Pre-Purchase Advice | Consumer Point"
+        description="Don't just buy an appliance. Buy the right appliance. Explore independent buying guides, technology comparisons, pre-purchase checklists, and verified warranty terms across all major appliances."
       />
-      <PageHero eyebrow="Supported Appliances" title="Appliances We Service, Repair & Maintain">
-        From precision air conditioner servicing to front-load washing machines and double-door refrigerators — our verified technicians deliver expert repair, genuine parts, and scheduled maintenance.
+
+      <PageHero
+        eyebrow="Consumer Pre-Purchase Guidance Hub"
+        title={
+          <>
+            Don't Just Buy an Appliance.
+            <br />
+            Buy the Right Appliance.
+          </>
+        }
+      >
+        Consumer Point is your independent pre-purchase guide partner. We help you understand appliance
+        technologies, verify room and electrical requirements, decode manufacturer warranties, and select
+        the exact specifications suited to your family before you spend a single rupee.
       </PageHero>
-      <section className="section products-section">
+
+      {/* Category Selection Carousel / Grid */}
+      <section className="section category-hub-section">
         <div className="container">
-          <div className="catalog-toolbar">
-            <div className="search-input-wrap">
-              <Search size={17} />
-              <input
-                className="form-control"
-                type="search"
-                aria-label="Search appliance categories"
-                placeholder="Search appliances, e.g. refrigerator"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
+          <Reveal>
+            <div className="section-head-center">
+              <p className="eyebrow">
+                <span />
+                EXPLORE BY APPLIANCE CATEGORY
+              </p>
+              <h2>Select an Appliance to View its Complete Buying Guide</h2>
+              <p className="subtext">
+                Every category includes 4 mandatory sections: Know Your Product, Pre-Purchase Checklist,
+                Interactive Recommendation Assistant, and Know Your Warranty.
+              </p>
             </div>
-            <select
-              className="form-control"
-              aria-label="Filter appliance category"
-              value={group}
-              onChange={(event) => setGroup(event.target.value)}
-            >
-              {[
-                "All categories",
-                "Cooling",
-                "Laundry",
-                "Entertainment",
-                "Kitchen",
-                "Electrical",
-              ].map((value) => (
-                <option key={value}>{value}</option>
-              ))}
-            </select>
-          </div>
-          <div className="catalog-count" aria-live="polite">
-            <span>
-              {filtered.length} appliance{" "}
-              {filtered.length === 1 ? "category" : "categories"} to explore
-            </span>
-            {(search || group !== "All categories") && (
-              <button
-                className="reset-button"
-                onClick={() => {
-                  setSearch("");
-                  setGroup("All categories");
-                }}
-              >
-                Reset filters
-              </button>
-            )}
-          </div>
-          {filtered.length ? (
-            <ProductGrid items={filtered} />
-          ) : (
-            <div className="empty-state">
-              <SearchX size={37} />
-              <h2>No match just yet.</h2>
-              <p>Try a different appliance name or clear your filters.</p>
-              <button
-                className="button button-secondary"
-                onClick={() => {
-                  setSearch("");
-                  setGroup("All categories");
-                }}
-              >
-                Show all appliances
-              </button>
+
+            <div className="category-selection-grid">
+              {availableCategories.map((cat) => {
+                const IconComponent = cat.icon;
+                const isSelected = activeCategory === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    className={`cat-card-btn ${isSelected ? "selected" : ""}`}
+                    onClick={() => handleSelectCategory(cat.id)}
+                  >
+                    <div className="cat-icon-wrap">
+                      <IconComponent size={26} strokeWidth={1.75} />
+                    </div>
+                    <h3>{cat.name}</h3>
+                    <p>{cat.desc}</p>
+                    <span className="cat-btn-cta">
+                      {isSelected ? "Currently Viewing Guide" : "View Buying Guide"}
+                      <ArrowRight size={14} />
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          )}
-          <div className="notice catalog-notice">
-            <Info size={19} />
-            <p>
-              These are supported appliance service and maintenance categories. Images
-              are illustrative. Service availability, spare parts, and technician scheduling
-              must be confirmed by the team. No authorised dealership or retail sales relationship is implied.
-            </p>
-          </div>
+          </Reveal>
         </div>
       </section>
+
+      {/* Interactive Buying Assistant Feature */}
+      <section className="section assistant-feature-section" id="interactive-assistant">
+        <div className="container">
+          <Reveal>
+            <BuyingAssistant initialCategory={activeCategory} compact={false} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* The 4-Section Comprehensive Buying Guide View */}
+      <section className="section active-guide-section">
+        <div className="container">
+          <Reveal>
+            <CategoryGuideView guide={currentGuide} />
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Dedicated Warranty Highlight Strip */}
+      <section className="section warranty-callout-strip">
+        <div className="container">
+          <Reveal className="warranty-strip-inner">
+            <div className="warranty-strip-text">
+              <span className="strip-badge">
+                <ShieldCheck size={16} /> CENTRAL WARRANTY KNOWLEDGE HUB
+              </span>
+              <h2>Confused by Inverter PCB or Compressor Warranty Clauses?</h2>
+              <p>
+                Visit our dedicated Warranty Education Center to understand manufacturer terms,
+                authorized installation rules, and how to verify your coverage before signing the receipt.
+              </p>
+            </div>
+            <Link to="/warranty-guide" className="button button-primary strip-btn">
+              Explore Central Warranty Center
+              <ArrowRight size={16} />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="notice catalog-notice" style={{ marginTop: "30px", marginBottom: "30px" }}>
+          <Info size={19} />
+          <p>
+            Consumer Point is an independent consumer guidance and after-sales service network. Product
+            specifications and warranty structures are compiled from official manufacturer documentation
+            and industry standards. Always verify specific model details against the printed manufacturer
+            brochure and warranty certificate before purchase.
+          </p>
+        </div>
+      </div>
+
       <FinalCTA />
     </>
   );

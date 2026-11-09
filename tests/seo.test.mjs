@@ -12,7 +12,7 @@ test("SEO: robots.txt protects private portals and publishes sitemap", () => {
   assert.ok(robots.includes("Sitemap: https://www.consumerpoint.co.in/sitemap.xml"));
 });
 
-test("SEO: sitemap.xml exists and includes all 15 public pages", () => {
+test("SEO: sitemap.xml exists and includes all 16 public pages", () => {
   const sitemap = readFileSync(resolve("public/sitemap.xml"), "utf8");
   assert.ok(sitemap.startsWith("<?xml"));
   assert.ok(sitemap.includes("<urlset"));
@@ -41,7 +41,7 @@ test("SEO: Prerendered pages have unique titles, descriptions, canonicals, and s
     assert.ok(html.includes(`<title>${route.title.replace(/&/g, "&amp;")}</title>`));
 
     // Description
-    assert.ok(html.includes(`content="${route.description.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}"`));
+    assert.ok(html.includes(`content="${route.description.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/'/g, "&#39;")}"`));
 
     // Canonical
     const expectedCanonical = `https://www.consumerpoint.co.in${route.path === "/" ? "/" : route.path}`;

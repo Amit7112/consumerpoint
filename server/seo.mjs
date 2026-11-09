@@ -8,8 +8,12 @@ export const pageMetadata = {
     "Meet Consumer Point, a customer-focused home-appliance business bringing sales, installation enquiries, service support, and maintenance together.",
   ],
   "/products": [
-    "Home Appliances & Product Enquiries",
-    "Explore air conditioners, refrigerators, washing machines, televisions, kitchen appliances, water purifiers, and electrical appliance enquiries.",
+    "Appliance Buying Guides & Spec Comparison",
+    "Don't just buy an appliance. Buy the right appliance. Pre-purchase buying checklists, engineering comparisons, and sizing guides for 12 major home appliance and electrical categories.",
+  ],
+  "/warranty-guide": [
+    "Appliance Warranty Guide | PCB & Manufacturer Coverage Reality",
+    "Understand appliance warranties before purchasing. Real facts on comprehensive vs component warranties, inverter PCB coverage, labour exclusions, and warranty claim procedures.",
   ],
   "/services": [
     "Doorstep Appliance Repair & Installation Services",

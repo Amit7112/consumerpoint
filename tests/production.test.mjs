@@ -15,7 +15,7 @@ test("production build: metadata, CSP, gzip, deep links, 404, privacy, and real 
   await new Promise((resolve) => reservation.once("listening", resolve));
   const port = reservation.address().port;
   await new Promise((resolve) => reservation.close(resolve));
-  const origin = `http://localhost:${port}`;
+  const origin = `http://127.0.0.1:${port}`;
   let output = "";
   const server = spawn(process.execPath, ["server/index.mjs"], {
     env: {
@@ -67,7 +67,7 @@ test("production build: metadata, CSP, gzip, deep links, 404, privacy, and real 
   const markup = await products.text();
   assert.match(
     markup,
-    /<title>Home Appliances &amp; Product Enquiries \| Consumer Point<\/title>/,
+    /<title>Appliance Buying Guides &amp; Spec Comparison \| Consumer Point<\/title>/,
   );
   assert.match(
     markup,

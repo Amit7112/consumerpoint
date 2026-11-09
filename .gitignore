@@ -3,7 +3,7 @@ dist/
 .env
 .env.*
 !.env.example
-data/
+/data/
 test-results/
 playwright-report/
 artifacts/

@@ -10,6 +10,8 @@ import {
   CookingPot,
   Droplets,
   Fan,
+  Microwave,
+  UtensilsCrossed,
   HeartHandshake,
   MessagesSquare,
   ClipboardCheck,
@@ -17,10 +19,18 @@ import {
   LifeBuoy,
   FileCheck2,
   Briefcase,
+  MapPin,
+  Receipt,
+  ShieldCheck,
+  SlidersHorizontal,
+  Lightbulb,
+  Zap,
 } from "lucide-react";
 
 export const navigation = [
   { label: "Home", path: "/" },
+  { label: "Buying Guides", path: "/products" },
+  { label: "Warranty Guide", path: "/warranty-guide" },
   { label: "About Us", path: "/about" },
   { label: "Services", path: "/services" },
   { label: "AMC Plans", path: "/amc-maintenance" },
@@ -138,6 +148,26 @@ export const categories = [
     icon: Tv,
   },
   {
+    id: "water-purifiers",
+    name: "Water Purifiers",
+    short: "Thoughtful choices. Clearer water.",
+    description:
+      "Discuss water purification options based on your household requirements.",
+    group: "Kitchen",
+    image: "water-purifier",
+    icon: Droplets,
+  },
+  {
+    id: "microwave-ovens",
+    name: "Microwave Ovens",
+    short: "Fast, versatile cooking solutions.",
+    description:
+      "Compare Solo, Grill, and Convection models tailored to your family's cooking needs.",
+    group: "Kitchen",
+    image: "microwave",
+    icon: Microwave,
+  },
+  {
     id: "geysers",
     name: "Geysers & Water Heaters",
     short: "Warmth when you need it.",
@@ -146,6 +176,16 @@ export const categories = [
     group: "Electrical",
     image: "geyser",
     icon: Heater,
+  },
+  {
+    id: "dishwashers",
+    name: "Dishwashers",
+    short: "Effortless hygiene & vessel cleaning.",
+    description:
+      "Select place settings, intensive wash cycles, and Indian utensil compatibility.",
+    group: "Kitchen",
+    image: "dishwasher",
+    icon: UtensilsCrossed,
   },
   {
     id: "kitchen-appliances",
@@ -158,16 +198,6 @@ export const categories = [
     icon: CookingPot,
   },
   {
-    id: "water-purifiers",
-    name: "Water Purifiers",
-    short: "Thoughtful choices. Clearer water.",
-    description:
-      "Discuss water purification options based on your household requirements.",
-    group: "Kitchen",
-    image: "water-purifier",
-    icon: Droplets,
-  },
-  {
     id: "fans-electrical",
     name: "Fans & Electrical Appliances",
     short: "Everyday essentials, considered.",
@@ -176,6 +206,42 @@ export const categories = [
     group: "Electrical",
     image: "fan",
     icon: Fan,
+  },
+  {
+    id: "led-lighting",
+    name: "LED Lighting",
+    short: "Energy-efficient illumination.",
+    description: "Bulbs, battens, downlights, and commercial lighting advisory.",
+    group: "Electrical",
+    image: "led-lighting",
+    icon: Lightbulb,
+  },
+  {
+    id: "inverters-power-backup",
+    name: "Inverters & Power Backup",
+    short: "Uninterrupted home power security.",
+    description: "Pure sine wave inverters, tubular batteries, and lithium power systems.",
+    group: "Electrical",
+    image: "inverter",
+    icon: Zap,
+  },
+  {
+    id: "electric-vehicles",
+    name: "Electric Vehicles (EVs)",
+    short: "Electric mobility & charging setup.",
+    description: "Electric 2-wheelers, 3-wheelers, and residential charging infrastructure.",
+    group: "Electrical",
+    image: "electric-vehicle",
+    icon: Briefcase,
+  },
+  {
+    id: "home-electrical-wiring",
+    name: "Home Electrical Wiring",
+    short: "Concealed planning & shock protection.",
+    description: "Concealed conduit planning, copper wire gauges, DB layout, and earthing.",
+    group: "Electrical",
+    image: "electrical-wiring",
+    icon: Settings2,
   },
 ];
 
@@ -486,5 +552,89 @@ export const defaultEnquiryItems = [
     city: "Lucknow / East UP",
     address: "Lucknow East",
     contactMethod: "Phone",
+  },
+];
+
+export interface WhyChooseService {
+  id: string;
+  stepNumber: number;
+  title: string;
+  shortDesc: string;
+  fullDesc: string;
+  icon: typeof MessagesSquare;
+  linkText: string;
+  linkTo: string;
+}
+
+export const whyChooseServices: WhyChooseService[] = [
+  {
+    id: "pre-purchase-consultation",
+    stepNumber: 1,
+    title: "Pre-Purchase Consultation",
+    shortDesc: "Help customers understand installation and service requirements before selecting a product.",
+    fullDesc: "Discuss room dimensions, electrical loads, plumbing layouts, and ventilation with an appliance specialist before ordering so you invest in appliances that actually fit your household space.",
+    icon: MessagesSquare,
+    linkText: "Request Consultation",
+    linkTo: "/contact",
+  },
+  {
+    id: "pincode-check",
+    stepNumber: 2,
+    title: "PIN-Code Serviceability Check",
+    shortDesc: "Confirm whether Consumer Point has service coverage and suitable technician availability in the customer's area.",
+    fullDesc: "Verify coverage across 432 postal PIN codes in Prayagraj, Bhadohi, Kaushambi, and Jaunpur with real-time technician availability and doorstep turnaround timelines.",
+    icon: MapPin,
+    linkText: "Check PIN Coverage",
+    linkTo: "/service-locations",
+  },
+  {
+    id: "installation-cost-guidance",
+    stepNumber: 3,
+    title: "Installation Cost Guidance",
+    shortDesc: "Explain standard installation charges, additional material costs and possible site-dependent expenses.",
+    fullDesc: "Clear breakdowns of base technician installation fees, copper tubing extensions, outdoor heavy brackets, drain line plumbing, and electrical isolators with zero surprise bills.",
+    icon: Receipt,
+    linkText: "View Installation Details",
+    linkTo: "/services",
+  },
+  {
+    id: "site-readiness-assessment",
+    stepNumber: 4,
+    title: "Site Readiness Assessment",
+    shortDesc: "Help customers prepare electrical points, plumbing, mounting locations, space and accessories before installation.",
+    fullDesc: "Pre-installation assessment covering dedicated 16A earthing sockets, water inlet pressure, drain gradient, wall load capacity, and doorway clearance to guarantee first-time installation success.",
+    icon: ClipboardCheck,
+    linkText: "Prepare Your Site",
+    linkTo: "/contact",
+  },
+  {
+    id: "warranty-awareness",
+    stepNumber: 5,
+    title: "Warranty Awareness",
+    shortDesc: "Help customers understand manufacturer warranty conditions, component coverage, exclusions, installation requirements and claim procedures.",
+    fullDesc: "Unpack manufacturer warranties — distinguish 1-year comprehensive coverage from 10-year motor/compressor parts-only badges, identify exclusions, and understand brand claim requirements.",
+    icon: ShieldCheck,
+    linkText: "Explore Warranty Guide",
+    linkTo: "/warranty-guide",
+  },
+  {
+    id: "product-buying-guidance",
+    stepNumber: 6,
+    title: "Product Buying Guidance",
+    shortDesc: "Help customers understand appliance technologies, compare specifications, identify useful features and select products according to their requirements and budget.",
+    fullDesc: "Independent, engineer-reviewed buying guides and technical comparisons across 8 major household appliance categories to eliminate marketing gimmicks and match your budget.",
+    icon: SlidersHorizontal,
+    linkText: "Browse Buying Guides",
+    linkTo: "/products",
+  },
+  {
+    id: "after-sales-amc-support",
+    stepNumber: 7,
+    title: "After-Sales Service & AMC Support",
+    shortDesc: "Assist customers with appliance installation, servicing, repairs, maintenance and available Annual Maintenance Contract plans.",
+    fullDesc: "Doorstep maintenance by verified local technicians, genuine spare parts replacement, rapid emergency repairs, and comprehensive annual maintenance coverage for long-term reliability.",
+    icon: Wrench,
+    linkText: "Explore AMC Plans",
+    linkTo: "/amc-maintenance",
   },
 ];

@@ -22,7 +22,7 @@ const defaults: BusinessConfig = {
   name: "Consumer Point",
   phone: "9810863934",
   email: "support@consumerpoint.co.in",
-  address: "",
+  address: " LIG -58, Near to Akshayvat Hospital, ADA Colony Naini Prayagraj- 211008",
   hours: "Mon - Sat: 9:00 AM - 8:00 PM",
   whatsapp: "919810863934",
   mapsUrl: "",

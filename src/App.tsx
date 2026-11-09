@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Products from "./pages/Products";
+import WarrantyGuide from "./pages/WarrantyGuide";
 import Services from "./pages/Services";
 import AMC from "./pages/AMC";
 import Careers from "./pages/Careers";
@@ -24,6 +25,8 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="products" element={<Products />} />
+            <Route path="buying-guides" element={<Navigate to="/products" replace />} />
+            <Route path="warranty-guide" element={<WarrantyGuide />} />
             <Route path="services" element={<Services />} />
             <Route path="amc-maintenance" element={<AMC />} />
             <Route path="amc" element={<Navigate to="/amc-maintenance" replace />} />
