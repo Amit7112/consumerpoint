@@ -72,18 +72,18 @@ const homeReviews = [
 ];
 
 const homeCategories = [
-  { id: "refrigerators", name: "Refrigerators", icon: Refrigerator, short: "Frost Free, Inverter & Capacities" },
-  { id: "air-conditioners", name: "Air Conditioners", icon: Wind, short: "100% Copper, Inverter & Sizing" },
-  { id: "washing-machines", name: "Washing Machines", icon: WashingMachine, short: "Front Load, Top Load & BLDC Motors" },
-  { id: "televisions", name: "Televisions", icon: Tv, short: "4K LED, QLED, OLED & Viewing Distance" },
-  { id: "water-purifiers", name: "Water Purifiers", icon: Droplets, short: "TDS Testing, RO vs UV vs UF" },
-  { id: "microwave-ovens", name: "Microwave Ovens", icon: Microwave, short: "Solo, Grill, Convection & Cavities" },
-  { id: "geysers", name: "Geysers", icon: Heater, short: "Instant, Storage & 8-Bar Tanks" },
-  { id: "dishwashers", name: "Dishwashers", icon: UtensilsCrossed, short: "13-14 Place Settings & 70°C Kadhai Wash" },
-  { id: "led-lighting", name: "LED Lighting", icon: Lightbulb, short: "Lumens, CCT & 4kV Surge Drivers" },
-  { id: "inverters-power-backup", name: "Inverters & Backup", icon: Zap, short: "Pure Sine Wave & Tubular/Lithium" },
-  { id: "electric-vehicles", name: "Electric Vehicles (EVs)", icon: Car, short: "E-Scooters, City EVs & Home 16A" },
-  { id: "home-electrical-wiring", name: "Home Electrical Planning", icon: HomeIcon, short: "Conduits, Gauges, DB & Point Planning" },
+  { id: "refrigerators", name: "Refrigerators", icon: Refrigerator, short: "Frost Free, Inverter & Capacities", image: "/images/refrigerator.webp" },
+  { id: "air-conditioners", name: "Air Conditioners", icon: Wind, short: "100% Copper, Inverter & Sizing", image: "/images/air-conditioner.webp" },
+  { id: "washing-machines", name: "Washing Machines", icon: WashingMachine, short: "Front Load, Top Load & BLDC Motors", image: "/images/washing-machine.webp" },
+  { id: "televisions", name: "Televisions", icon: Tv, short: "4K LED, QLED, OLED & Viewing Distance", image: "/images/television.webp" },
+  { id: "water-purifiers", name: "Water Purifiers", icon: Droplets, short: "TDS Testing, RO vs UV vs UF", image: "/images/water-purifier.webp" },
+  { id: "microwave-ovens", name: "Microwave Ovens", icon: Microwave, short: "Solo, Grill, Convection & Cavities", image: "/images/kitchen-appliances.webp" },
+  { id: "geysers", name: "Geysers", icon: Heater, short: "Instant, Storage & 8-Bar Tanks", image: "/images/geyser.webp" },
+  { id: "dishwashers", name: "Dishwashers", icon: UtensilsCrossed, short: "13-14 Place Settings & 70°C Kadhai Wash", image: "/images/dishwasher.webp" },
+  { id: "led-lighting", name: "LED Lighting", icon: Lightbulb, short: "Lumens, CCT & 4kV Surge Drivers", image: "/images/led-lighting.webp" },
+  { id: "inverters-power-backup", name: "Inverters & Backup", icon: Zap, short: "Pure Sine Wave & Tubular/Lithium", image: "/images/inverter.webp" },
+  { id: "electric-vehicles", name: "Electric Vehicles (EVs)", icon: Car, short: "E-Scooters, City EVs & Home 16A", image: "/images/electric-vehicle.webp" },
+  { id: "home-electrical-wiring", name: "Home Electrical Planning", icon: HomeIcon, short: "Conduits, Gauges, DB & Point Planning", image: "/images/electrical-wiring.webp" },
 ];
 
 const brandDifferentiators = [
@@ -124,8 +124,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Consumer Point | Your Pre-Purchase Appliance Guide Partner"
-        description="Don't just buy an appliance. Buy the right appliance. Consumer Point helps you understand technologies, compare specifications, verify warranties, and choose the right home appliances — with professional installation and service support."
+        title="Consumer Point | Pre-Purchase Guidance, Doorstep Repair & AMC Support"
+        description="Don't just buy an appliance. Buy the right appliance. Consumer Point helps you select the right products with unbiased buying guides, backed by expert doorstep installation, genuine repairs, and Comprehensive AMC plans."
       />
 
       {/* Hero Section */}
@@ -151,7 +151,7 @@ export default function Home() {
           >
             <p className="hero-eyebrow">
               <span />
-              YOUR PRE-PURCHASE APPLIANCE GUIDE PARTNER
+              YOUR PRE-PURCHASE &amp; AFTER-SALES APPLIANCE PARTNER
             </p>
             <p className="hero-brand">
               Consumer Point<span>.</span>
@@ -163,11 +163,11 @@ export default function Home() {
             </h1>
             <p className="hero-description">
               Understand appliance technologies before you invest, learn what to inspect before buying,
-              decode manufacturer warranty terms, and choose the right specifications for your home —
-              backed by professional doorstep installation and after-sales care.
+              decode manufacturer warranty terms, and select the right specifications for your home —
+              backed by certified doorstep installation, expert repairs, and Comprehensive AMC maintenance.
             </p>
             <div className="button-group">
-              <ButtonLink to="/products">Explore Buying Guides</ButtonLink>
+              <ButtonLink to="/partnerships">Partner With Us</ButtonLink>
               <ButtonLink to="/products#interactive-assistant" secondary light>
                 Find the Right Appliance
               </ButtonLink>
@@ -262,19 +262,29 @@ export default function Home() {
             {homeCategories.map((cat, idx) => {
               const IconComp = cat.icon;
               return (
-                <Reveal delay={idx * 0.04} key={cat.id}>
+                <Reveal delay={idx * 0.04} key={cat.id} className="home-cat-reveal">
                   <Link
                     to={`/products?category=${cat.id}#guide-details`}
                     className="home-cat-card"
                   >
-                    <div className="home-cat-top">
-                      <div className="home-cat-icon">
-                        <IconComp size={24} strokeWidth={1.8} />
-                      </div>
+                    <div className="home-cat-img-wrap">
+                      <img
+                        src={cat.image}
+                        alt={`${cat.name} Buying Guide`}
+                        loading="lazy"
+                        className="home-cat-img"
+                        width={340}
+                        height={180}
+                      />
                       <span className="home-cat-badge">Buying Guide</span>
                     </div>
                     <div className="home-cat-body">
-                      <h3>{cat.name}</h3>
+                      <div className="home-cat-header-row">
+                        <div className="home-cat-icon">
+                          <IconComp size={18} strokeWidth={1.8} />
+                        </div>
+                        <h3>{cat.name}</h3>
+                      </div>
                       <p>{cat.short}</p>
                     </div>
                     <div className="home-cat-action">
@@ -301,8 +311,8 @@ export default function Home() {
               <h2>"Your Money. Your Choice. Our Guidance."</h2>
               <p className="differentiation-sub">
                 Consumer Point is not just another appliance sales or service website. We are your
-                pre-purchase guidance partner — committed to helping you understand your options,
-                protect your hard-earned money, and maintain peace of mind for years to come.
+                complete appliance partner — combining unbiased pre-purchase buying guidance with
+                certified doorstep installation, reliable repair services, and Comprehensive AMC maintenance.
               </p>
             </div>
 

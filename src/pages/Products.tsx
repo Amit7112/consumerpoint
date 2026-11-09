@@ -80,7 +80,7 @@ export default function Products() {
           </>
         }
       >
-        Consumer Point is your independent pre-purchase guide partner. We help you understand appliance
+        Consumer Point is your independent pre-purchase appliance and lifecycle care partner. We help you understand appliance
         technologies, verify room and electrical requirements, decode manufacturer warranties, and select
         the exact specifications suited to your family before you spend a single rupee.
       </PageHero>

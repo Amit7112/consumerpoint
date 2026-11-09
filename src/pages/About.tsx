@@ -172,7 +172,7 @@ export default function About() {
               </p>
               <h2>Why Choose Consumer Point?</h2>
               <p className="section-description">
-                Your Trusted Pre-Purchase &amp; After-Sales Appliance Guide Partner.
+                Your Trusted Pre-Purchase Guidance &amp; Complete After-Sales Appliance Partner.
               </p>
             </div>
           </Reveal>
